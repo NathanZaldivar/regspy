@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="regespy.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with title and selection count -->
+        <header class="header">
+            <h1>Regex Generator</h1>
+            <div class="selection-count">
+                <span class="count-positive"><span id="matchCount">0</span> match</span>,
+                <span class="count-negative"><span id="excludeCount">0</span> exclude</span>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="generate">Generate</button>
+            <button class="tab-btn" data-tab="results">Results</button>
+            <button class="tab-btn" data-tab="dataset">Dataset</button>
+            <button class="tab-btn" data-tab="config">Config</button>
+        </nav>
+
+        <!-- Tab Contents -->
+        <div class="tab-contents">
+            <!-- Generate Tab -->
+            <div id="tab-generate" class="tab-content active">
+                <main class="content">
+                    <div class="instructions">
+                        Paste text below, then highlight to match. Right-click selections to mark as exclude.
+                    </div>
+                    <div id="textbox" class="textbox" contenteditable="true" data-placeholder="Paste or type text here..."></div>
+                </main>
+
+                <!-- List of current selections -->
+                <section class="selections-panel">
+                    <div class="selections-header">
+                        <span>Selections</span>
+                        <button id="clearBtn" class="btn btn-small">Clear All</button>
+                    </div>
+                    <ul id="selectionList" class="selection-list"></ul>
+                </section>
+            </div>
+
+            <!-- Results Tab -->
+            <div id="tab-results" class="tab-content">
+                <div class="results-header" style="display: none;">
+                    <div class="results-stats">
+                        <span id="resultsCount">0</span> patterns
+                    </div>
+                    <button id="clearResults" class="btn btn-small">Clear Results</button>
+                </div>
+                <div class="results-empty-state">
+                    <div class="empty-icon">📊</div>
+                    <p>No results yet</p>
+                    <small>Generate a regex pattern to see results here</small>
+                </div>
+                <div id="resultsTableContainer" class="results-table-container" style="display: none;"></div>
+            </div>
+
+            <!-- Dataset Tab -->
+            <div id="tab-dataset" class="tab-content">
+                <div class="dataset-header">
+                    <div class="dataset-stats">
+                        <span id="datasetCount">0</span> training examples
+                    </div>
+                    <div class="dataset-actions">
+                        <input type="text" id="datasetSearch" class="search-input" placeholder="Search...">
+                        <button id="refreshDataset" class="btn btn-small">Refresh</button>
+                    </div>
+                </div>
+                <div id="datasetTableContainer" class="dataset-table-container">
+                    <div class="dataset-loading">Loading dataset...</div>
+                </div>
+            </div>
+
+            <!-- Config Tab -->
+            <div id="tab-config" class="tab-content">
+                <div class="config-form">
+                    <div class="config-section">
+                        <h3>Model Settings</h3>
+                        <div class="config-row">
+                            <label for="configModel" title="Ollama model name to use for generation">Model</label>
+                            <input type="text" id="configModel" value="qwen2.5:3b">
+                        </div>
+                        <div class="config-row">
+                            <label for="configTemperature" title="Higher = more creative/random, Lower = more deterministic">Temperature</label>
+                            <input type="number" id="configTemperature" value="0.4" min="0" max="2" step="0.1">
+                        </div>
+                        <div class="config-row">
+                            <label for="configMaxAttempts" title="Maximum unique patterns to generate per run">Max Attempts</label>
+                            <input type="number" id="configMaxAttempts" value="10" min="1" max="50">
+                        </div>
+                        <div class="config-row">
+                            <label for="configRewardThreshold" title="Stop early if pattern scores above this value">Reward Threshold</label>
+                            <input type="number" id="configRewardThreshold" value="0.85" min="0" max="1" step="0.05">
+                        </div>
+                    </div>
+                    <div class="config-section">
+                        <h3>Scoring Weights <span class="weight-total" id="weightTotal">(1.00)</span></h3>
+                        <div class="config-row weight-row">
+                            <label for="weightMatchesAll" title="Percentage of required items the pattern matches">Matches All</label>
+                            <input type="number" id="weightMatchesAll" value="0.35" min="0" max="1" step="0.05" class="weight-input">
+                            <div class="weight-bar"><div class="weight-fill" style="width: 35%"></div></div>
+                        </div>
+                        <div class="config-row weight-row">
+                            <label for="weightExcludesAll" title="Percentage of excluded items the pattern avoids">Excludes All</label>
+                            <input type="number" id="weightExcludesAll" value="0.25" min="0" max="1" step="0.05" class="weight-input">
+                            <div class="weight-bar"><div class="weight-fill" style="width: 25%"></div></div>
+                        </div>
+                        <div class="config-row weight-row">
+                            <label for="weightCoherence" title="How similar extra matches are to target items">Coherence</label>
+                            <input type="number" id="weightCoherence" value="0.15" min="0" max="1" step="0.05" class="weight-input">
+                            <div class="weight-bar"><div class="weight-fill" style="width: 15%"></div></div>
+                        </div>
+                        <div class="config-row weight-row">
+                            <label for="weightGeneralization" title="Use of character classes (\\d, \\w) vs literals">Generalization</label>
+                            <input type="number" id="weightGeneralization" value="0.15" min="0" max="1" step="0.05" class="weight-input">
+                            <div class="weight-bar"><div class="weight-fill" style="width: 15%"></div></div>
+                        </div>
+                        <div class="config-row weight-row">
+                            <label for="weightSimplicity" title="Shorter patterns with less branching score higher">Simplicity</label>
+                            <input type="number" id="weightSimplicity" value="0.10" min="0" max="1" step="0.05" class="weight-input">
+                            <div class="weight-bar"><div class="weight-fill" style="width: 10%"></div></div>
+                        </div>
+                    </div>
+                    <div class="config-actions">
+                        <button id="resetConfig" class="btn btn-secondary">Reset to Defaults</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Overlay for confirmations -->
+        <div id="modalOverlay" class="modal-overlay" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <span id="modalTitle">Confirm</span>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div id="modalContent" class="modal-content"></div>
+                <div class="modal-actions">
+                    <button id="modalCancel" class="btn btn-secondary">Cancel</button>
+                    <button id="modalConfirm" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action buttons -->
+        <footer class="actions">
+            <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+            <button id="submitBtn" class="btn btn-primary">Generate Regex</button>
+        </footer>
+    </div>
+
+    <script src="regespy.js"></script>
+</body>
+</html>

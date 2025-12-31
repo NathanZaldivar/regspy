@@ -1,0 +1,1364 @@
+[
+  {
+    "text": "Errors: ERR-01, ERR-02, ERR-99 but not ERR-001 or ERR-002",
+    "match_items": ["ERR-01", "ERR-02", "ERR-99"],
+    "exclude_items": ["ERR-001", "ERR-002", "ERR-999"],
+    "expected_pattern": "\\bERR-\\d{2}\\b"
+  },
+  {
+    "text": "Codes: A12, B99, C01 but not A123 or B999",
+    "match_items": ["A12", "B99", "C01"],
+    "exclude_items": ["A123", "B999", "C012"],
+    "expected_pattern": "\\b[A-Z]\\d{2}\\b"
+  },
+  {
+    "text": "hello WORLD my NAME is COOKIES",
+    "match_items": ["WORLD", "NAME", "COOKIES"],
+    "exclude_items": ["World", "NaMe", "cookies"],
+    "expected_pattern": "[A-Z]{2,}"
+  },
+  {
+    "text": "IDs: user_01, admin_99, guest_42",
+    "match_items": ["user_01", "admin_99", "guest_42"],
+    "exclude_items": ["user", "admin_", "_42"],
+    "expected_pattern": "\\w+_\\d{2}"
+  },
+  {
+    "text": "Call 555-1234 or 555-9876 today",
+    "match_items": ["555-1234", "555-9876"],
+    "exclude_items": ["555-98", "12-34"],
+    "expected_pattern": "\\d{3}-\\d{4}"
+  },
+  {
+    "text": "v1.0.0 and v2.1.3 and v10.20.30 released",
+    "match_items": ["v1.0.0", "v2.1.3", "v10.20.30"],
+    "exclude_items": ["V10.20.30", "version1.0.0", "v1_0_0"],
+    "expected_pattern": "v\\d+\\.\\d+\\.\\d+"
+  },
+  {
+    "text": "Error: E001, Warning: E042, Info: E999",
+    "match_items": ["E001", "E042", "E999"],
+    "exclude_items": ["e001", "E00", "E12"],
+    "expected_pattern": "E\\d{3}"
+  },
+  {
+    "text": "Email support@test.com or sales@demo.org today",
+    "match_items": ["support@test.com", "sales@demo.org"],
+    "exclude_items": ["support@test", "@test.com"],
+    "expected_pattern": "\\w+@\\w+\\.\\w+"
+  },
+  {
+    "text": "IPs: 192.168.1.1 and 10.0.0.255 and 172.16.0.1",
+    "match_items": ["192.168.1.1", "10.0.0.255", "172.16.0.1"],
+    "exclude_items": ["192.168.1", "172.16.0.", "10.0"],
+    "expected_pattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"
+  },
+  {
+    "text": "Files: report.pdf, data.csv, image.png",
+    "match_items": ["report.pdf", "data.csv", "image.png"],
+    "exclude_items": ["report", ".pdf", "pdf"],
+    "expected_pattern": "\\w+\\.\\w{3}"
+  },
+  {
+    "text": "Dates: 2024-01-15, 2023-12-31, 2025-06-01",
+    "match_items": ["2024-01-15", "2023-12-31", "2025-06-01"],
+    "exclude_items": ["2024-1-15", "24-01-15", "2024/01/15"],
+    "expected_pattern": "\\d{4}-\\d{2}-\\d{2}"
+  },
+  {
+    "text": "Hashes: abc123def, 999fff000, deadbeef1",
+    "match_items": ["abc123def", "999fff000", "deadbeef1"],
+    "exclude_items": ["abc", "123", "ABC123DEF"],
+    "expected_pattern": "[a-f0-9]{9}"
+  },
+  {
+    "text": "Ports: :8080, :443, :3000",
+    "match_items": [":8080", ":443", ":3000"],
+    "exclude_items": ["8080", "443", "3000"],
+    "expected_pattern": ":\\d+"
+  },
+  {
+    "text": "UUIDs: a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "match_items": ["a1b2c3d4-e5f6-7890-abcd-ef1234567890"],
+    "exclude_items": ["a1b2c3d4", "e5f6-7890", "a1b2c3d4_e5f6_7890"],
+    "expected_pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+  },
+  {
+    "text": "Tags: #python, #security, #pentest",
+    "match_items": ["#python", "#security", "#pentest"],
+    "exclude_items": ["python", "hashtag", "security"],
+    "expected_pattern": "#\\w+"
+  },
+  {
+    "text": "Vars: $HOME, $USER, $PATH",
+    "match_items": ["$HOME", "$USER", "$PATH"],
+    "exclude_items": ["HOME", "${HOME}", "PATH"],
+    "expected_pattern": "\\$[A-Z]+"
+  },
+  {
+    "text": "Codes: ABC-123, XYZ-999, DEF-001",
+    "match_items": ["ABC-123", "XYZ-999", "DEF-001"],
+    "exclude_items": ["ABC123", "abc-123", "AB-123"],
+    "expected_pattern": "[A-Z]{3}-\\d{3}"
+  },
+  {
+    "text": "Times: 14:30, 09:15, 23:59",
+    "match_items": ["14:30", "09:15", "23:59"],
+    "exclude_items": ["1430", "14-30", "14:3"],
+    "expected_pattern": "\\d{2}:\\d{2}"
+  },
+  {
+    "text": "MAC: 00:1A:2B:3C:4D:5E and AA:BB:CC:DD:EE:FF",
+    "match_items": ["00:1A:2B:3C:4D:5E", "AA:BB:CC:DD:EE:FF"],
+    "exclude_items": ["00:1A:2B", "001A2B3C4D5E", "00-1A-2B-3C-4D-5E"],
+    "expected_pattern": "[0-9A-F]{2}(?::[0-9A-F]{2}){5}"
+  },
+  {
+    "text": "Refs: CVE-2024-1234, CVE-2023-9999, CVE-2025-0001",
+    "match_items": ["CVE-2024-1234", "CVE-2023-9999", "CVE-2025-0001"],
+    "exclude_items": ["CVE2024-1234", "cve-2024-1234", "CVE-24-1234"],
+    "expected_pattern": "CVE-\\d{4}-\\d{4}"
+  },
+  {
+    "text": "Amounts: $100.00, $25.50, $9999.99",
+    "match_items": ["$100.00", "$25.50", "$9999.99"],
+    "exclude_items": ["100.00", "$100", "100$"],
+    "expected_pattern": "\\$\\d+\\.\\d{2}"
+  },
+  {
+    "text": "Paths: /etc/passwd, /var/log/syslog, /usr/bin/python",
+    "match_items": ["/etc/passwd", "/var/log/syslog", "/usr/bin/python"],
+    "exclude_items": ["etc/passwd", "passwd", "/etc"],
+    "expected_pattern": "/\\w+(?:/\\w+)+"
+  },
+  {
+    "text": "Headers: X-Forwarded-For, X-Real-IP, X-Custom-Header",
+    "match_items": ["X-Forwarded-For", "X-Real-IP", "X-Custom-Header"],
+    "exclude_items": ["Forwarded-For", "X_Forwarded_For", "x-forwarded-for"],
+    "expected_pattern": "X-[A-Z][a-z]+(?:-[A-Z][a-z]+)*"
+  },
+  {
+    "text": "Tokens: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U",
+    "match_items": ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"],
+    "exclude_items": ["abc123", "JWVCJ9"],
+    "expected_pattern": "eyJ[A-Za-z0-9_-]+"
+  },
+  {
+    "text": "Commits: a1b2c3d, f9e8d7c, 1234567",
+    "match_items": ["a1b2c3d", "f9e8d7c", "1234567"],
+    "exclude_items": ["a1b2c3", "A1B2C3D", "xyz"],
+    "expected_pattern": "[a-f0-9]{7}"
+  },
+  {
+    "text": "Endpoints: GET /api/users, POST /api/login, DELETE /api/session",
+    "match_items": ["GET /api/users", "POST /api/login", "DELETE /api/session"],
+    "exclude_items": ["/api/users", "GET", "get /api/users"],
+    "expected_pattern": "[A-Z]+\\s/api/\\w+"
+  },
+  {
+    "text": "Ranges: 192.168.1.0/24, 10.0.0.0/8, 172.16.0.0/12",
+    "match_items": ["192.168.1.0/24", "10.0.0.0/8", "172.16.0.0/12"],
+    "exclude_items": ["192.168.1.0", "/24", "192.168.1.0-24"],
+    "expected_pattern": "\\d{1,3}(?:\\.\\d{1,3}){3}/\\d{1,2}"
+  },
+  {
+    "text": "Flags: --help, --verbose, --output",
+    "match_items": ["--help", "--verbose", "--output"],
+    "exclude_items": ["-help", "help", "-v"],
+    "expected_pattern": "--\\w+"
+  },
+  {
+    "text": "Versions: Python 3.11.4, Node 18.17.0, Go 1.21.0",
+    "match_items": ["3.11.4", "18.17.0", "1.21.0"],
+    "exclude_items": ["Python", "3.11", "Node"],
+    "expected_pattern": "\\d+\\.\\d+\\.\\d+"
+  },
+  {
+    "text": "Status: HTTP/1.1 200 OK, HTTP/1.1 404 Not Found, HTTP/2 500 Error",
+    "match_items": ["200", "404", "500"],
+    "exclude_items": ["HTTP", "1.1", "OK"],
+    "expected_pattern": "\\b[1-5]\\d{2}\\b"
+  },
+  {
+    "text": "Logs: [INFO] started, [WARN] slow query, [ERROR] failed",
+    "match_items": ["[INFO]", "[WARN]", "[ERROR]"],
+    "exclude_items": ["INFO", "WARN", "ERROR"],
+    "expected_pattern": "\\[[A-Z]+\\]"
+  },
+  {
+    "text": "Params: user=admin, role=editor, id=12345",
+    "match_items": ["user=admin", "role=editor", "id=12345"],
+    "exclude_items": ["admin", "=admin", "user="],
+    "expected_pattern": "\\w+=\\w+"
+  },
+  {
+    "text": "Base64: SGVsbG8gV29ybGQ=, dGVzdGluZzEyMw==, YWJjZGVm",
+    "match_items": ["SGVsbG8gV29ybGQ=", "dGVzdGluZzEyMw==", "YWJjZGVm"],
+    "exclude_items": ["@#$%", "===", "!@#"],
+    "expected_pattern": "[A-Za-z0-9+/]+=*"
+  },
+  {
+    "text": "Secrets: AKIA1234567890ABCDEF, AKIA0987654321ZYXWVU",
+    "match_items": ["AKIA1234567890ABCDEF", "AKIA0987654321ZYXWVU"],
+    "exclude_items": ["AKIA", "1234567890ABCDEF", "akia1234567890abcdef"],
+    "expected_pattern": "AKIA[A-Z0-9]{16}"
+  },
+  {
+    "text": "Domains: test.example.com, api.prod.internal, dev.staging.app",
+    "match_items": ["test.example.com", "api.prod.internal", "dev.staging.app"],
+    "exclude_items": ["example.com", "test", ".com"],
+    "expected_pattern": "\\w+\\.\\w+\\.\\w+"
+  },
+  {
+    "text": "Cookies: session=abc123; path=/",
+    "match_items": ["session=abc123"],
+    "exclude_items": ["abc123", "session", "path=/"],
+    "expected_pattern": "\\w+=\\w+"
+  },
+  {
+    "text": "SQL: SELECT * FROM users, INSERT INTO logs, UPDATE config",
+    "match_items": ["SELECT", "INSERT", "UPDATE"],
+    "exclude_items": ["select", "FROM", "INTO"],
+    "expected_pattern": "\\b(?:SELECT|INSERT|UPDATE)\\b"
+  },
+  {
+    "text": "Protocols: https://, ftp://, ssh://",
+    "match_items": ["https://", "ftp://", "ssh://"],
+    "exclude_items": ["https", "://", "http://"],
+    "expected_pattern": "(?:https|ftp|ssh)://"
+  },
+  {
+    "text": "Hexcodes: #FF5733, #00FF00, #ABCDEF",
+    "match_items": ["#FF5733", "#00FF00", "#ABCDEF"],
+    "exclude_items": ["FF5733", "#FFF", "#ff5733"],
+    "expected_pattern": "#[A-F0-9]{6}"
+  },
+  {
+    "text": "Phone: (555) 123-4567, (800) 999-0000, (212) 555-1212",
+    "match_items": ["(555) 123-4567", "(800) 999-0000", "(212) 555-1212"],
+    "exclude_items": ["555-123-4567", "5551234567", "(555)123-4567"],
+    "expected_pattern": "\\(\\d{3}\\)\\s\\d{3}-\\d{4}"
+  },
+  {
+    "text": "SemVer: ^1.0.0, ~2.3.4, >=3.0.0",
+    "match_items": ["^1.0.0", "~2.3.4", ">=3.0.0"],
+    "exclude_items": ["1.0.0", "2.3.4", "3.0.0"],
+    "expected_pattern": "[\\^~]|>=\\d+\\.\\d+\\.\\d+"
+  },
+  {
+    "text": "Containers: sha256:a1b2c3d4e5f6, sha256:9f8e7d6c5b4a",
+    "match_items": ["sha256:a1b2c3d4e5f6", "sha256:9f8e7d6c5b4a"],
+    "exclude_items": ["a1b2c3d4e5f6", "sha256", "sha256-a1b2c3d4e5f6"],
+    "expected_pattern": "sha256:[a-f0-9]+"
+  },
+  {
+    "text": "XML: <tag>, </tag>, <self/>",
+    "match_items": ["<tag>", "</tag>", "<self/>"],
+    "exclude_items": ["tag", "<tag", "tag>"],
+    "expected_pattern": "</?\\w+/?>"
+  },
+  {
+    "text": "Keys: api_key_12345, secret_token_abcde, auth_code_xyz99",
+    "match_items": ["api_key_12345", "secret_token_abcde", "auth_code_xyz99"],
+    "exclude_items": ["api_key", "12345", "api-key-12345"],
+    "expected_pattern": "\\w+_\\w+_\\w+"
+  },
+  {
+    "text": "Percentages: 100%, 50.5%, 0.01%",
+    "match_items": ["100%", "50.5%", "0.01%"],
+    "exclude_items": ["100", "%", "100 %"],
+    "expected_pattern": "\\d+(?:\\.\\d+)?%"
+  },
+  {
+    "text": "Memory: 512MB, 4GB, 16TB",
+    "match_items": ["512MB", "4GB", "16TB"],
+    "exclude_items": ["512", "MB", "512 MB"],
+    "expected_pattern": "\\d+(?:MB|GB|TB)"
+  },
+  {
+    "text": "Coords: 40.7128,-74.0060 and 51.5074,-0.1278",
+    "match_items": ["40.7128,-74.0060", "51.5074,-0.1278"],
+    "exclude_items": ["40.7128", "-74.0060", "40.7128 -74.0060"],
+    "expected_pattern": "-?\\d+\\.\\d+,-?\\d+\\.\\d+"
+  },
+  {
+    "text": "Args: $1, $2, $@, $#",
+    "match_items": ["$1", "$2", "$@", "$#"],
+    "exclude_items": ["1", "2", "$ 1"],
+    "expected_pattern": "\\$[0-9@#]"
+  },
+  {
+    "text": "Env: NODE_ENV=production, DEBUG=true, PORT=3000",
+    "match_items": ["NODE_ENV=production", "DEBUG=true", "PORT=3000"],
+    "exclude_items": ["NODE_ENV", "production", "=production"],
+    "expected_pattern": "[A-Z_]+=\\w+"
+  },
+  {
+    "text": "Comments: // todo, /* fix */, # note",
+    "match_items": ["// todo", "/* fix */", "# note"],
+    "exclude_items": ["todo", "fix", "note"],
+    "expected_pattern": "(?://|/\\*|#)\\s*\\w+"
+  },
+  {
+    "text": "Orders: ORD-2024-001, ORD-2024-002, ORD-2024-003",
+    "match_items": ["ORD-2024-001", "ORD-2024-002", "ORD-2024-003"],
+    "exclude_items": ["ORD-2024", "ORD-024-001", "ORD-202-001"],
+    "expected_pattern": "ORD-\\d{4}-\\d{3}"
+  },
+  {
+    "text": "Users: john.smith, mary.jones, bob.wilson",
+    "match_items": ["john.smith", "mary.jones", "bob.wilson"],
+    "exclude_items": ["john", "smith", "john smith"],
+    "expected_pattern": "[a-z]+\\.[a-z]+"
+  },
+  {
+    "text": "Accounts: ACC001, ACC002, ACC999",
+    "match_items": ["ACC001", "ACC002", "ACC999"],
+    "exclude_items": ["acc001", "AC001", "ACCC001"],
+    "expected_pattern": "ACC\\d{3}"
+  },
+  {
+    "text": "Invoices: INV-2024-Q1-001, INV-2024-Q2-005, INV-2024-Q3-010",
+    "match_items": ["INV-2024-Q1-001", "INV-2024-Q2-005", "INV-2024-Q3-010"],
+    "exclude_items": ["INV-2024-Q1", "INV-Q1-001", "INV-2024-Q4-001"],
+    "expected_pattern": "INV-\\d{4}-Q[1-3]-\\d{3}"
+  },
+  {
+    "text": "Tasks: TASK_001, TASK_042, TASK_999",
+    "match_items": ["TASK_001", "TASK_042", "TASK_999"],
+    "exclude_items": ["task_001", "TASK001", "TASK_99"],
+    "expected_pattern": "TASK_\\d{3}"
+  },
+  {
+    "text": "Builds: build-1, build-42, build-100",
+    "match_items": ["build-1", "build-42", "build-100"],
+    "exclude_items": ["build_1", "Build-1", "build-abc"],
+    "expected_pattern": "build-\\d+"
+  },
+  {
+    "text": "Queries: q_find_users, q_get_config, q_delete_session",
+    "match_items": ["q_find_users", "q_get_config", "q_delete_session"],
+    "exclude_items": ["find_users", "q_find", "_users"],
+    "expected_pattern": "q_\\w+_\\w+"
+  },
+  {
+    "text": "Models: v1_model_final.pkl, v2_model_best.pkl, v3_model_prod.pkl",
+    "match_items": ["v1_model_final.pkl", "v2_model_best.pkl", "v3_model_prod.pkl"],
+    "exclude_items": ["model_final.pkl", "v1_final.pkl", ".pkl"],
+    "expected_pattern": "v\\d+_model_\\w+\\.pkl"
+  },
+  {
+    "text": "Sessions: sess_abc123def456, sess_xyz789uvw012, sess_pqr345stu678",
+    "match_items": ["sess_abc123def456", "sess_xyz789uvw012", "sess_pqr345stu678"],
+    "exclude_items": ["abc123def456", "sess_abc", "sess_"],
+    "expected_pattern": "sess_[a-z0-9]{12}"
+  },
+  {
+    "text": "Branches: feature/auth, feature/api, hotfix/bug123",
+    "match_items": ["feature/auth", "feature/api", "hotfix/bug123"],
+    "exclude_items": ["feature", "/auth", "feature_auth"],
+    "expected_pattern": "(?:feature|hotfix)/\\w+"
+  },
+  {
+    "text": "Packages: pkg-v1.0, pkg-v2.5, pkg-v10.0",
+    "match_items": ["pkg-v1.0", "pkg-v2.5", "pkg-v10.0"],
+    "exclude_items": ["pkg-1.0", "v1.0", "pkg"],
+    "expected_pattern": "pkg-v\\d+\\.\\d+"
+  },
+  {
+    "text": "Events: evt_user_login, evt_user_logout, evt_session_expire",
+    "match_items": ["evt_user_login", "evt_user_logout", "evt_session_expire"],
+    "exclude_items": ["user_login", "evt_", "login"],
+    "expected_pattern": "evt_\\w+_\\w+"
+  },
+  {
+    "text": "Metrics: metric_cpu_usage, metric_mem_usage, metric_disk_usage",
+    "match_items": ["metric_cpu_usage", "metric_mem_usage", "metric_disk_usage"],
+    "exclude_items": ["cpu_usage", "metric_cpu", "usage"],
+    "expected_pattern": "metric_\\w+_\\w+"
+  },
+  {
+    "text": "Snapshots: snap_2024_01_15, snap_2024_06_30, snap_2025_01_01",
+    "match_items": ["snap_2024_01_15", "snap_2024_06_30", "snap_2025_01_01"],
+    "exclude_items": ["snap_2024", "2024_01_15", "snap_"],
+    "expected_pattern": "snap_\\d{4}_\\d{2}_\\d{2}"
+  },
+  {
+    "text": "Resources: res_db_conn, res_cache_key, res_file_handle",
+    "match_items": ["res_db_conn", "res_cache_key", "res_file_handle"],
+    "exclude_items": ["db_conn", "res_", "conn"],
+    "expected_pattern": "res_\\w+_\\w+"
+  },
+  {
+    "text": "Alerts: alrt_HIGH, alrt_MEDIUM, alrt_LOW",
+    "match_items": ["alrt_HIGH", "alrt_MEDIUM", "alrt_LOW"],
+    "exclude_items": ["alrt_high", "alrt_", "HIGH"],
+    "expected_pattern": "alrt_[A-Z]+"
+  },
+  {
+    "text": "Channels: chan_general, chan_random, chan_announcements",
+    "match_items": ["chan_general", "chan_random", "chan_announcements"],
+    "exclude_items": ["general", "chan_", "#general"],
+    "expected_pattern": "chan_\\w+"
+  },
+  {
+    "text": "Servers: srv_prod_01, srv_prod_02, srv_staging_01",
+    "match_items": ["srv_prod_01", "srv_prod_02", "srv_staging_01"],
+    "exclude_items": ["prod_01", "srv_01", "srv_"],
+    "expected_pattern": "srv_\\w+_\\d{2}"
+  },
+  {
+    "text": "Backup: bak_2024_w01, bak_2024_w10, bak_2024_w52",
+    "match_items": ["bak_2024_w01", "bak_2024_w10", "bak_2024_w52"],
+    "exclude_items": ["bak_2024", "2024_w01", "bak_"],
+    "expected_pattern": "bak_\\d{4}_w\\d{2}"
+  },
+  {
+    "text": "Zones: zone_us_east, zone_eu_west, zone_ap_south",
+    "match_items": ["zone_us_east", "zone_eu_west", "zone_ap_south"],
+    "exclude_items": ["us_east", "zone_", "east"],
+    "expected_pattern": "zone_\\w+_\\w+"
+  },
+  {
+    "text": "Tiers: tier_free, tier_pro, tier_enterprise",
+    "match_items": ["tier_free", "tier_pro", "tier_enterprise"],
+    "exclude_items": ["free", "tier_", "pro"],
+    "expected_pattern": "tier_\\w+"
+  },
+  {
+    "text": "Profiles: prof_admin_v1, prof_user_v2, prof_guest_v1",
+    "match_items": ["prof_admin_v1", "prof_user_v2", "prof_guest_v1"],
+    "exclude_items": ["admin_v1", "prof_admin", "v1"],
+    "expected_pattern": "prof_\\w+_v\\d"
+  },
+  {
+    "text": "Widgets: widget_search_001, widget_filter_002, widget_sort_003",
+    "match_items": ["widget_search_001", "widget_filter_002", "widget_sort_003"],
+    "exclude_items": ["search_001", "widget_search", "001"],
+    "expected_pattern": "widget_\\w+_\\d{3}"
+  },
+  {
+    "text": "Tokens: tok_live_abc123, tok_test_xyz789, tok_demo_pqr456",
+    "match_items": ["tok_live_abc123", "tok_test_xyz789", "tok_demo_pqr456"],
+    "exclude_items": ["live_abc123", "tok_live", "abc123"],
+    "expected_pattern": "tok_\\w+_\\w+"
+  },
+  {
+    "text": "Schemas: sch_v1_users, sch_v2_products, sch_v1_orders",
+    "match_items": ["sch_v1_users", "sch_v2_products", "sch_v1_orders"],
+    "exclude_items": ["v1_users", "sch_v1", "users"],
+    "expected_pattern": "sch_v\\d_\\w+"
+  },
+  {
+    "text": "Labels: lbl_error_001, lbl_warn_042, lbl_info_999",
+    "match_items": ["lbl_error_001", "lbl_warn_042", "lbl_info_999"],
+    "exclude_items": ["error_001", "lbl_error", "001"],
+    "expected_pattern": "lbl_\\w+_\\d{3}"
+  },
+  {
+    "text": "Hooks: hook_pre_commit, hook_post_merge, hook_pre_push",
+    "match_items": ["hook_pre_commit", "hook_post_merge", "hook_pre_push"],
+    "exclude_items": ["pre_commit", "hook_pre", "commit"],
+    "expected_pattern": "hook_(?:pre|post)_\\w+"
+  },
+  {
+    "text": "Badges: badge_gold_1, badge_silver_2, badge_bronze_3",
+    "match_items": ["badge_gold_1", "badge_silver_2", "badge_bronze_3"],
+    "exclude_items": ["gold_1", "badge_gold", "1"],
+    "expected_pattern": "badge_\\w+_\\d"
+  },
+  {
+    "text": "Nodes: node_0x1a2b, node_0xc3d4, node_0xe5f6",
+    "match_items": ["node_0x1a2b", "node_0xc3d4", "node_0xe5f6"],
+    "exclude_items": ["0x1a2b", "node_1a2b", "node_"],
+    "expected_pattern": "node_0x[a-f0-9]+"
+  },
+  {
+    "text": "Maps: map_user_001, map_item_999, map_chunk_042",
+    "match_items": ["map_user_001", "map_item_999", "map_chunk_042"],
+    "exclude_items": ["user_001", "map_user", "001"],
+    "expected_pattern": "map_\\w+_\\d{3}"
+  },
+  {
+    "text": "Rules: rule_auth_v1, rule_payment_v2, rule_approval_v1",
+    "match_items": ["rule_auth_v1", "rule_payment_v2", "rule_approval_v1"],
+    "exclude_items": ["auth_v1", "rule_auth", "v1"],
+    "expected_pattern": "rule_\\w+_v\\d"
+  },
+  {
+    "text": "Pools: pool_connection_01, pool_cache_02, pool_worker_03",
+    "match_items": ["pool_connection_01", "pool_cache_02", "pool_worker_03"],
+    "exclude_items": ["connection_01", "pool_connection", "01"],
+    "expected_pattern": "pool_\\w+_\\d{2}"
+  },
+  {
+    "text": "Queues: queue_default_100, queue_priority_50, queue_batch_500",
+    "match_items": ["queue_default_100", "queue_priority_50", "queue_batch_500"],
+    "exclude_items": ["default_100", "queue_default", "100"],
+    "expected_pattern": "queue_\\w+_\\d+"
+  },
+  {
+    "text": "Indexes: idx_user_email, idx_product_sku, idx_order_date",
+    "match_items": ["idx_user_email", "idx_product_sku", "idx_order_date"],
+    "exclude_items": ["user_email", "idx_user", "email"],
+    "expected_pattern": "idx_\\w+_\\w+"
+  },
+  {
+    "text": "Triggers: trig_insert_audit, trig_update_log, trig_delete_cleanup",
+    "match_items": ["trig_insert_audit", "trig_update_log", "trig_delete_cleanup"],
+    "exclude_items": ["insert_audit", "trig_insert", "audit"],
+    "expected_pattern": "trig_\\w+_\\w+"
+  },
+  {
+    "text": "Views: vw_sales_report, vw_inventory_status, vw_user_activity",
+    "match_items": ["vw_sales_report", "vw_inventory_status", "vw_user_activity"],
+    "exclude_items": ["sales_report", "vw_sales", "report"],
+    "expected_pattern": "vw_\\w+_\\w+"
+  },
+  {
+    "text": "Stored Procedures: sp_create_user, sp_update_config, sp_cleanup_old",
+    "match_items": ["sp_create_user", "sp_update_config", "sp_cleanup_old"],
+    "exclude_items": ["create_user", "sp_create", "user"],
+    "expected_pattern": "sp_\\w+_\\w+"
+  },
+  {
+    "text": "Functions: fn_calc_total, fn_format_date, fn_validate_input",
+    "match_items": ["fn_calc_total", "fn_format_date", "fn_validate_input"],
+    "exclude_items": ["calc_total", "fn_calc", "total"],
+    "expected_pattern": "fn_\\w+_\\w+"
+  },
+  {
+    "text": "Aggregates: agg_sum_amount, agg_avg_score, agg_count_items",
+    "match_items": ["agg_sum_amount", "agg_avg_score", "agg_count_items"],
+    "exclude_items": ["sum_amount", "agg_sum", "amount"],
+    "expected_pattern": "agg_\\w+_\\w+"
+  },
+  {
+    "text": "Partitions: part_2024_01, part_2024_02, part_2024_12",
+    "match_items": ["part_2024_01", "part_2024_02", "part_2024_12"],
+    "exclude_items": ["2024_01", "part_2024", "part_"],
+    "expected_pattern": "part_\\d{4}_\\d{2}"
+  },
+  {
+    "text": "Sequences: seq_user_id_001, seq_order_id_999, seq_product_id_042",
+    "match_items": ["seq_user_id_001", "seq_order_id_999", "seq_product_id_042"],
+    "exclude_items": ["user_id_001", "seq_user_id", "001"],
+    "expected_pattern": "seq_\\w+_id_\\d{3}"
+  },
+  {
+    "text": "Constraints: ck_age_positive, ck_email_valid, ck_price_nonzero",
+    "match_items": ["ck_age_positive", "ck_email_valid", "ck_price_nonzero"],
+    "exclude_items": ["age_positive", "ck_age", "positive"],
+    "expected_pattern": "ck_\\w+_\\w+"
+  },
+  {
+    "text": "Roles: role_admin_001, role_user_002, role_guest_003",
+    "match_items": ["role_admin_001", "role_user_002", "role_guest_003"],
+    "exclude_items": ["admin_001", "role_admin", "001"],
+    "expected_pattern": "role_\\w+_\\d{3}"
+  },
+  {
+    "text": "Permissions: perm_read_data, perm_write_data, perm_delete_data",
+    "match_items": ["perm_read_data", "perm_write_data", "perm_delete_data"],
+    "exclude_items": ["read_data", "perm_read", "data"],
+    "expected_pattern": "perm_\\w+_\\w+"
+  },
+  {
+    "text": "Scopes: scope_admin_full, scope_user_limited, scope_guest_readonly",
+    "match_items": ["scope_admin_full", "scope_user_limited", "scope_guest_readonly"],
+    "exclude_items": ["admin_full", "scope_admin", "full"],
+    "expected_pattern": "scope_\\w+_\\w+"
+  },
+  {
+    "text": "API Keys: key_prod_abc123, key_staging_def456, key_test_ghi789",
+    "match_items": ["key_prod_abc123", "key_staging_def456", "key_test_ghi789"],
+    "exclude_items": [],
+    "expected_pattern": "key_\\w+_\\w+"
+  },
+  {
+    "text": "Database connections: conn_master_001, conn_replica_002, conn_cache_003",
+    "match_items": ["conn_master_001", "conn_replica_002", "conn_cache_003"],
+    "exclude_items": [],
+    "expected_pattern": "conn_\\w+_\\d{3}"
+  },
+  {
+    "text": "Feature flags: flag_dark_mode, flag_beta_ui, flag_new_api",
+    "match_items": ["flag_dark_mode", "flag_beta_ui", "flag_new_api"],
+    "exclude_items": ["dark_mode", "flag_dark", "mode"],
+    "expected_pattern": "flag_\\w+_\\w+"
+  },
+  {
+    "text": "Certificates: cert_2024_primary, cert_2024_backup, cert_2025_renewal",
+    "match_items": ["cert_2024_primary", "cert_2024_backup", "cert_2025_renewal"],
+    "exclude_items": [],
+    "expected_pattern": "cert_\\d{4}_\\w+"
+  },
+  {
+    "text": "Config files: cfg_app.json, cfg_db.yaml, cfg_cache.toml",
+    "match_items": ["cfg_app.json", "cfg_db.yaml", "cfg_cache.toml"],
+    "exclude_items": ["app.json", "cfg_app", ".json"],
+    "expected_pattern": "cfg_\\w+\\.\\w+"
+  },
+  {
+    "text": "Log levels: log_TRACE, log_DEBUG, log_INFO, log_WARN, log_ERROR",
+    "match_items": ["log_TRACE", "log_DEBUG", "log_INFO"],
+    "exclude_items": [],
+    "expected_pattern": "log_[A-Z]+"
+  },
+  {
+    "text": "Cache keys: cache_user_1001, cache_post_5050, cache_comment_9999",
+    "match_items": ["cache_user_1001", "cache_post_5050", "cache_comment_9999"],
+    "exclude_items": [],
+    "expected_pattern": "cache_\\w+_\\d+"
+  },
+  {
+    "text": "Service names: svc_auth, svc_payment, svc_notification",
+    "match_items": ["svc_auth", "svc_payment", "svc_notification"],
+    "exclude_items": ["auth", "svc_", "service_auth"],
+    "expected_pattern": "svc_\\w+"
+  },
+  {
+    "text": "Message queues: mq_order_process, mq_email_send, mq_batch_job",
+    "match_items": ["mq_order_process", "mq_email_send", "mq_batch_job"],
+    "exclude_items": [],
+    "expected_pattern": "mq_\\w+_\\w+"
+  },
+  {
+    "text": "Endpoints: ep_v1_users, ep_v2_products, ep_v1_orders",
+    "match_items": ["ep_v1_users", "ep_v2_products", "ep_v1_orders"],
+    "exclude_items": ["v1_users", "ep_v1", "users"],
+    "expected_pattern": "ep_v\\d_\\w+"
+  },
+  {
+    "text": "Middleware: mw_auth_jwt, mw_cors_handler, mw_rate_limit",
+    "match_items": ["mw_auth_jwt", "mw_cors_handler", "mw_rate_limit"],
+    "exclude_items": [],
+    "expected_pattern": "mw_\\w+_\\w+"
+  },
+  {
+    "text": "Validators: val_email_format, val_phone_number, val_credit_card",
+    "match_items": ["val_email_format", "val_phone_number", "val_credit_card"],
+    "exclude_items": ["email_format", "val_email", "format"],
+    "expected_pattern": "val_\\w+_\\w+"
+  },
+  {
+    "text": "Serializers: ser_json_compact, ser_xml_pretty, ser_binary_fast",
+    "match_items": ["ser_json_compact", "ser_xml_pretty", "ser_binary_fast"],
+    "exclude_items": [],
+    "expected_pattern": "ser_\\w+_\\w+"
+  },
+  {
+    "text": "Decorators: dec_async_handler, dec_cache_result, dec_retry_logic",
+    "match_items": ["dec_async_handler", "dec_cache_result", "dec_retry_logic"],
+    "exclude_items": ["async_handler", "dec_async", "handler"],
+    "expected_pattern": "dec_\\w+_\\w+"
+  },
+  {
+    "text": "Workers: worker_bg_001, worker_bg_002, worker_bg_003",
+    "match_items": ["worker_bg_001", "worker_bg_002", "worker_bg_003"],
+    "exclude_items": [],
+    "expected_pattern": "worker_\\w+_\\d{3}"
+  },
+  {
+    "text": "Migrations: mig_2024_01_create_users, mig_2024_02_add_columns, mig_2024_03_indexes",
+    "match_items": ["mig_2024_01_create_users", "mig_2024_02_add_columns", "mig_2024_03_indexes"],
+    "exclude_items": ["2024_01_create_users", "mig_2024_01", "create_users"],
+    "expected_pattern": "mig_\\d{4}_\\d{2}_\\w+"
+  },
+  {
+    "text": "Fixtures: fix_user_admin, fix_post_published, fix_comment_spam",
+    "match_items": ["fix_user_admin", "fix_post_published", "fix_comment_spam"],
+    "exclude_items": [],
+    "expected_pattern": "fix_\\w+_\\w+"
+  },
+  {
+    "text": "Mocks: mock_api_response, mock_db_query, mock_service_call",
+    "match_items": ["mock_api_response", "mock_db_query", "mock_service_call"],
+    "exclude_items": ["api_response", "mock_api", "response"],
+    "expected_pattern": "mock_\\w+_\\w+"
+  },
+  {
+    "text": "Stubs: stub_http_200, stub_http_404, stub_http_500",
+    "match_items": ["stub_http_200", "stub_http_404", "stub_http_500"],
+    "exclude_items": [],
+    "expected_pattern": "stub_\\w+_\\d{3}"
+  },
+  {
+    "text": "Transactions: tx_payment_001, tx_refund_002, tx_settlement_003",
+    "match_items": ["tx_payment_001", "tx_refund_002", "tx_settlement_003"],
+    "exclude_items": ["payment_001", "tx_payment", "001"],
+    "expected_pattern": "tx_\\w+_\\d{3}"
+  },
+  {
+    "text": "Sessions: session_live_12345, session_test_67890, session_dev_11111",
+    "match_items": ["session_live_12345", "session_test_67890", "session_dev_11111"],
+    "exclude_items": [],
+    "expected_pattern": "session_\\w+_\\d{5}"
+  },
+  {
+    "text": "Accounts: account_business_001, account_personal_002, account_enterprise_003",
+    "match_items": ["account_business_001", "account_personal_002", "account_enterprise_003"],
+    "exclude_items": ["business_001", "account_business", "001"],
+    "expected_pattern": "account_\\w+_\\d{3}"
+  },
+  {
+    "text": "Datasets: dataset_training_v1, dataset_validation_v1, dataset_test_v2",
+    "match_items": ["dataset_training_v1", "dataset_validation_v1", "dataset_test_v2"],
+    "exclude_items": [],
+    "expected_pattern": "dataset_\\w+_v\\d"
+  },
+  {
+    "text": "Models loaded: model_bert_base, model_gpt2_large, model_resnet_50",
+    "match_items": ["model_bert_base", "model_gpt2_large", "model_resnet_50"],
+    "exclude_items": ["bert_base", "model_bert", "base"],
+    "expected_pattern": "model_\\w+_\\w+"
+  },
+  {
+    "text": "Checkpoints: ckpt_epoch_001, ckpt_epoch_042, ckpt_epoch_100",
+    "match_items": ["ckpt_epoch_001", "ckpt_epoch_042", "ckpt_epoch_100"],
+    "exclude_items": [],
+    "expected_pattern": "ckpt_\\w+_\\d{3}"
+  },
+  {
+    "text": "Artifacts: artifact_build_2024_001, artifact_release_2024_002, artifact_hotfix_2024_003",
+    "match_items": ["artifact_build_2024_001", "artifact_release_2024_002", "artifact_hotfix_2024_003"],
+    "exclude_items": ["build_2024_001", "artifact_build_2024", "001"],
+    "expected_pattern": "artifact_\\w+_\\d{4}_\\d{3}"
+  },
+  {
+    "text": "Packages: pkg_util_v1, pkg_auth_v2, pkg_core_v1",
+    "match_items": ["pkg_util_v1", "pkg_auth_v2", "pkg_core_v1"],
+    "exclude_items": [],
+    "expected_pattern": "pkg_\\w+_v\\d"
+  },
+  {
+    "text": "Libraries: lib_boost_1_81, lib_zlib_1_2_11, lib_openssl_3_0",
+    "match_items": ["lib_boost_1_81", "lib_zlib_1_2_11", "lib_openssl_3_0"],
+    "exclude_items": ["boost_1_81", "lib_boost", "1_81"],
+    "expected_pattern": "lib_\\w+_\\d_\\d+"
+  },
+  {
+    "text": "Containers: container_prod_app, container_dev_app, container_test_api",
+    "match_items": ["container_prod_app", "container_dev_app", "container_test_api"],
+    "exclude_items": [],
+    "expected_pattern": "container_\\w+_\\w+"
+  },
+  {
+    "text": "Images: image_ubuntu_22, image_alpine_3, image_debian_11",
+    "match_items": ["image_ubuntu_22", "image_alpine_3", "image_debian_11"],
+    "exclude_items": ["ubuntu_22", "image_ubuntu", "22"],
+    "expected_pattern": "image_\\w+_\\d+"
+  },
+  {
+    "text": "Volumes: vol_data_001, vol_logs_002, vol_cache_003",
+    "match_items": ["vol_data_001", "vol_logs_002", "vol_cache_003"],
+    "exclude_items": [],
+    "expected_pattern": "vol_\\w+_\\d{3}"
+  },
+  {
+    "text": "Networks: net_frontend_prod, net_backend_prod, net_db_prod",
+    "match_items": ["net_frontend_prod", "net_backend_prod", "net_db_prod"],
+    "exclude_items": ["frontend_prod", "net_frontend", "prod"],
+    "expected_pattern": "net_\\w+_\\w+"
+  },
+  {
+    "text": "Secrets: secret_db_password, secret_api_key, secret_jwt_token",
+    "match_items": ["secret_db_password", "secret_api_key", "secret_jwt_token"],
+    "exclude_items": [],
+    "expected_pattern": "secret_\\w+_\\w+"
+  },
+  {
+    "text": "Configs: config_app_prod, config_db_prod, config_cache_staging",
+    "match_items": ["config_app_prod", "config_db_prod", "config_cache_staging"],
+    "exclude_items": ["app_prod", "config_app", "prod"],
+    "expected_pattern": "config_\\w+_\\w+"
+  },
+  {
+    "text": "Certificates: tls_cert_2024, tls_cert_2025, tls_key_2024",
+    "match_items": ["tls_cert_2024", "tls_cert_2025", "tls_key_2024"],
+    "exclude_items": [],
+    "expected_pattern": "tls_\\w+_\\d{4}"
+  },
+  {
+    "text": "Policies: policy_access_001, policy_retention_002, policy_encryption_003",
+    "match_items": ["policy_access_001", "policy_retention_002", "policy_encryption_003"],
+    "exclude_items": ["access_001", "policy_access", "001"],
+    "expected_pattern": "policy_\\w+_\\d{3}"
+  },
+  {
+    "text": "Quotas: quota_api_1000, quota_storage_5000, quota_bandwidth_unlimited",
+    "match_items": ["quota_api_1000", "quota_storage_5000", "quota_bandwidth_unlimited"],
+    "exclude_items": [],
+    "expected_pattern": "quota_\\w+_\\w+"
+  },
+  {
+    "text": "Limits: limit_requests_100, limit_connections_50, limit_payload_10mb",
+    "match_items": ["limit_requests_100", "limit_connections_50", "limit_payload_10mb"],
+    "exclude_items": ["requests_100", "limit_requests", "100"],
+    "expected_pattern": "limit_\\w+_\\w+"
+  },
+  {
+    "text": "Thresholds: threshold_cpu_80, threshold_memory_90, threshold_disk_95",
+    "match_items": ["threshold_cpu_80", "threshold_memory_90", "threshold_disk_95"],
+    "exclude_items": [],
+    "expected_pattern": "threshold_\\w+_\\d{2}"
+  },
+  {
+    "text": "Intervals: interval_heartbeat_30s, interval_sync_5m, interval_backup_1h",
+    "match_items": ["interval_heartbeat_30s", "interval_sync_5m", "interval_backup_1h"],
+    "exclude_items": ["heartbeat_30s", "interval_heartbeat", "30s"],
+    "expected_pattern": "interval_\\w+_\\d+[smh]"
+  },
+  {
+    "text": "Retries: retry_connect_3, retry_query_5, retry_upload_10",
+    "match_items": ["retry_connect_3", "retry_query_5", "retry_upload_10"],
+    "exclude_items": [],
+    "expected_pattern": "retry_\\w+_\\d+"
+  },
+  {
+    "text": "Timeouts: timeout_api_30, timeout_db_60, timeout_cache_5",
+    "match_items": ["timeout_api_30", "timeout_db_60", "timeout_cache_5"],
+    "exclude_items": ["api_30", "timeout_api", "30"],
+    "expected_pattern": "timeout_\\w+_\\d+"
+  },
+  {
+    "text": "Batches: batch_process_001, batch_import_042, batch_cleanup_999",
+    "match_items": ["batch_process_001", "batch_import_042", "batch_cleanup_999"],
+    "exclude_items": [],
+    "expected_pattern": "batch_\\w+_\\d{3}"
+  },
+  {
+    "text": "Streams: stream_input_001, stream_output_002, stream_error_003",
+    "match_items": ["stream_input_001", "stream_output_002", "stream_error_003"],
+    "exclude_items": ["input_001", "stream_input", "001"],
+    "expected_pattern": "stream_\\w+_\\d{3}"
+  },
+  {
+    "text": "Handlers: handler_request_v1, handler_response_v1, handler_error_v2",
+    "match_items": ["handler_request_v1", "handler_response_v1", "handler_error_v2"],
+    "exclude_items": [],
+    "expected_pattern": "handler_\\w+_v\\d"
+  },
+  {
+    "text": "Mappers: mapper_user_entity, mapper_post_dto, mapper_comment_view",
+    "match_items": ["mapper_user_entity", "mapper_post_dto", "mapper_comment_view"],
+    "exclude_items": ["user_entity", "mapper_user", "entity"],
+    "expected_pattern": "mapper_\\w+_\\w+"
+  },
+  {
+    "text": "Converters: conv_int_string, conv_date_timestamp, conv_json_xml",
+    "match_items": ["conv_int_string", "conv_date_timestamp", "conv_json_xml"],
+    "exclude_items": [],
+    "expected_pattern": "conv_\\w+_\\w+"
+  },
+  {
+    "text": "Filters: filter_active_users, filter_published_posts, filter_verified_emails",
+    "match_items": ["filter_active_users", "filter_published_posts", "filter_verified_emails"],
+    "exclude_items": ["active_users", "filter_active", "users"],
+    "expected_pattern": "filter_\\w+_\\w+"
+  },
+  {
+    "text": "Sorters: sorter_date_asc, sorter_priority_desc, sorter_name_asc",
+    "match_items": ["sorter_date_asc", "sorter_priority_desc", "sorter_name_asc"],
+    "exclude_items": [],
+    "expected_pattern": "sorter_\\w+_(?:asc|desc)"
+  },
+  {
+    "text": "Groupers: grouper_user_id, grouper_category_type, grouper_status_code",
+    "match_items": ["grouper_user_id", "grouper_category_type", "grouper_status_code"],
+    "exclude_items": ["user_id", "grouper_user", "id"],
+    "expected_pattern": "grouper_\\w+_\\w+"
+  },
+  {
+    "text": "Reducers: reducer_sum_amount, reducer_count_items, reducer_avg_price",
+    "match_items": ["reducer_sum_amount", "reducer_count_items", "reducer_avg_price"],
+    "exclude_items": [],
+    "expected_pattern": "reducer_\\w+_\\w+"
+  },
+  {
+    "text": "HTTP Headers: Authorization: Bearer, X-Custom-Header: value, Content-Type: application/json",
+    "match_items": ["Authorization: Bearer", "Content-Type: application/json"],
+    "exclude_items": ["Bearer", "application/json", ":"],
+    "expected_pattern": "[A-Za-z-]+:\\s\\w+"
+  },
+  {
+    "text": "HTTP Methods: GET /users, POST /login, DELETE /session, PATCH /config",
+    "match_items": ["GET /users", "POST /login", "DELETE /session"],
+    "exclude_items": ["/users", "GET", "get /users"],
+    "expected_pattern": "[A-Z]+\\s/\\w+"
+  },
+  {
+    "text": "URLs: https://api.example.com/v1/users, https://api.example.com/v2/products, https://api.example.com/v1/orders",
+    "match_items": ["https://api.example.com/v1/users", "https://api.example.com/v2/products", "https://api.example.com/v1/orders"],
+    "exclude_items": [],
+    "expected_pattern": "https://[a-z.]+/v\\d/\\w+"
+  },
+  {
+    "text": "Query strings: ?user_id=123&role=admin, ?page=1&limit=10, ?search=test&sort=date",
+    "match_items": ["?user_id=123&role=admin", "?page=1&limit=10"],
+    "exclude_items": ["user_id=123", "&role=admin", "?user_id"],
+    "expected_pattern": "\\?\\w+=\\w+&\\w+=\\w+"
+  },
+  {
+    "text": "HTML tags: <div class=\"container\">, <span id=\"header\">, <a href=\"link\">",
+    "match_items": ["<div class=\"container\">", "<span id=\"header\">", "<a href=\"link\">"],
+    "exclude_items": ["<div", "class=\"container\"", ">"],
+    "expected_pattern": "<\\w+[^>]*>"
+  },
+  {
+    "text": "CSS classes: .btn-primary, .text-center, .ml-4, .mt-2",
+    "match_items": [".btn-primary", ".text-center", ".ml-4"],
+    "exclude_items": ["btn-primary", ".btn", "primary"],
+    "expected_pattern": "\\.\\w+-\\w+"
+  },
+  {
+    "text": "Variable names: let user_name, const api_key, var total_amount",
+    "match_items": ["user_name", "api_key", "total_amount"],
+    "exclude_items": ["let", "const", "name"],
+    "expected_pattern": "[a-z]+_[a-z]+(_[a-z]+)?"
+  },
+  {
+    "text": "Function calls: getUserData(), setUserName(), calculateTotalPrice()",
+    "match_items": ["getUserData()", "setUserName()", "calculateTotalPrice()"],
+    "exclude_items": ["UserData", "get", "()"],
+    "expected_pattern": "[a-z]+[A-Z]\\w*\\(\\)"
+  },
+  {
+    "text": "Class names: class UserAccount, class ProductCatalog, class OrderManager",
+    "match_items": ["UserAccount", "ProductCatalog", "OrderManager"],
+    "exclude_items": ["userAccount", "User", "Account"],
+    "expected_pattern": "[A-Z]\\w+[A-Z]\\w+"
+  },
+  {
+    "text": "Import statements: from models import User, import requests, from utils import helper",
+    "match_items": ["from models import User", "from utils import helper"],
+    "exclude_items": ["models import", "import User", "from models"],
+    "expected_pattern": "from \\w+ import \\w+"
+  },
+  {
+    "text": "Module paths: src/components/Button.tsx, lib/utils/helpers.js, app/models/User.py",
+    "match_items": ["src/components/Button.tsx", "lib/utils/helpers.js", "app/models/User.py"],
+    "exclude_items": [],
+    "expected_pattern": "\\w+/\\w+/\\w+\\.\\w+"
+  },
+  {
+    "text": "JSON keys: {\"user_id\": 123, \"product_name\": \"Widget\", \"is_active\": true}",
+    "match_items": ["user_id", "product_name", "is_active"],
+    "exclude_items": ["123", "JSON", ":"],
+    "expected_pattern": "[a-z_]+"
+  },
+  {
+    "text": "Database columns: user_id INT, product_name VARCHAR, created_at TIMESTAMP",
+    "match_items": ["user_id INT", "product_name VARCHAR", "created_at TIMESTAMP"],
+    "exclude_items": ["user_id", "INT", "created_at"],
+    "expected_pattern": "[a-z_]+ [A-Z]+"
+  },
+  {
+    "text": "Markdown headers: # Main Title, ## Subheading, ### Details",
+    "match_items": ["# Main Title", "## Subheading", "### Details"],
+    "exclude_items": ["Main Title", "#", "##"],
+    "expected_pattern": "#{1,3}\\s\\w+"
+  },
+  {
+    "text": "Code comments: // TODO: implement feature, /* FIXME: broken logic */, # BUG: off by one",
+    "match_items": ["// TODO: implement", "/* FIXME: broken", "# BUG: off"],
+    "exclude_items": ["TODO", "implement", "//"],
+    "expected_pattern": "(?://|/\\*|#)\\s\\w+:"
+  },
+  {
+    "text": "Error codes: ERR_FILE_NOT_FOUND, ERR_PERMISSION_DENIED, ERR_TIMEOUT",
+    "match_items": ["ERR_FILE_NOT_FOUND", "ERR_PERMISSION_DENIED", "ERR_TIMEOUT"],
+    "exclude_items": [],
+    "expected_pattern": "ERR_[A-Z_]+"
+  },
+  {
+    "text": "Log timestamps: 2024-01-15T10:30:45Z, 2024-01-15T14:22:30+00:00, 2024-01-15T09:15:00-05:00",
+    "match_items": ["2024-01-15T10:30:45Z", "2024-01-15T14:22:30+00:00"],
+    "exclude_items": ["2024-01-15", "10:30:45", "+00:00"],
+    "expected_pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+  },
+  {
+    "text": "Log messages: [2024-01-15 10:30:45] INFO: User logged in, [2024-01-15 14:22:30] ERROR: Database connection failed",
+    "match_items": ["[2024-01-15 10:30:45] INFO:", "[2024-01-15 14:22:30] ERROR:"],
+    "exclude_items": ["2024-01-15", "10:30:45", "INFO"],
+    "expected_pattern": "\\[\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\]\\s[A-Z]+:"
+  },
+  {
+    "text": "Stack traces: at UserService.getUser (user.service.ts:42), at AuthController.login (auth.controller.ts:15)",
+    "match_items": ["at UserService.getUser (user.service.ts:42)", "at AuthController.login (auth.controller.ts:15)"],
+    "exclude_items": [],
+    "expected_pattern": "at \\w+\\.\\w+\\s\\(\\w+\\.\\w+\\.ts:\\d+\\)"
+  },
+  {
+    "text": "Git commits: commit a1b2c3d4e5f6, commit 9f8e7d6c5b4a, commit f1e2d3c4b5a6",
+    "match_items": ["a1b2c3d4e5f6", "9f8e7d6c5b4a", "f1e2d3c4b5a6"],
+    "exclude_items": ["commit", "a1b2c3", "d4e5f6"],
+    "expected_pattern": "[a-f0-9]{12}"
+  },
+  {
+    "text": "Docker images: node:18-alpine, python:3.11-slim, ubuntu:22.04",
+    "match_items": ["node:18-alpine", "python:3.11-slim", "ubuntu:22.04"],
+    "exclude_items": [],
+    "expected_pattern": "\\w+:\\d+\\.?\\d*-?\\w*"
+  },
+  {
+    "text": "NPM packages: @types/node, lodash-es, axios@1.4.0",
+    "match_items": ["@types/node", "lodash-es", "axios@1.4.0"],
+    "exclude_items": ["NPM", "1.4.0", "/"],
+    "expected_pattern": "@?[a-z-]+(@\\d+\\.\\d+\\.\\d+)?"
+  },
+  {
+    "text": "Python imports: from django.db import models, from flask import Flask, import numpy as np",
+    "match_items": ["from django.db import models", "from flask import Flask"],
+    "exclude_items": [],
+    "expected_pattern": "from [a-z.]+ import \\w+"
+  },
+  {
+    "text": "Environment variables: DATABASE_URL=postgres://localhost, API_KEY=secret123, DEBUG=true",
+    "match_items": ["DATABASE_URL=postgres://localhost"],
+    "exclude_items": ["DATABASE_URL", "postgres://localhost", "="],
+    "expected_pattern": "[A-Z_]+=\\w+://\\S+"
+  },
+  {
+    "text": "AWS resources: arn:aws:s3:::my-bucket, arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef0",
+    "match_items": ["arn:aws:s3:::my-bucket", "arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890abcdef0"],
+    "exclude_items": [],
+    "expected_pattern": "arn:aws:[a-z0-9:/-]+"
+  },
+  {
+    "text": "Kubernetes manifests: apiVersion: v1, kind: Pod, metadata: {name: my-pod}",
+    "match_items": ["apiVersion: v1", "kind: Pod"],
+    "exclude_items": ["v1", "Pod", ":"],
+    "expected_pattern": "(?:apiVersion|kind):\\s\\w+"
+  },
+  {
+    "text": "YAML keys: image: nginx:latest, replicas: 3, port: 8080",
+    "match_items": ["image: nginx:latest", "replicas: 3", "port: 8080"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z]+:\\s\\S+"
+  },
+  {
+    "text": "SQL queries: SELECT * FROM users, INSERT INTO logs VALUES, UPDATE config SET",
+    "match_items": ["INSERT INTO", "UPDATE config"],
+    "exclude_items": ["SELECT", "FROM users", "logs"],
+    "expected_pattern": "(?:SELECT|INSERT|UPDATE)\\s\\w+"
+  },
+  {
+    "text": "Database names: db_production_001, db_staging_002, db_development_001",
+    "match_items": ["db_production_001", "db_staging_002", "db_development_001"],
+    "exclude_items": [],
+    "expected_pattern": "db_\\w+_\\d{3}"
+  },
+  {
+    "text": "Table names: users_table, products_table, orders_archive",
+    "match_items": ["users_table", "products_table", "orders_archive"],
+    "exclude_items": ["users", "table", "_table"],
+    "expected_pattern": "[a-z]+_[a-z]+"
+  },
+  {
+    "text": "Redis keys: user:1001:profile, session:abc123, cache:products:list",
+    "match_items": ["user:1001:profile", "session:abc123", "cache:products:list"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z:0-9]+"
+  },
+  {
+    "text": "Elasticsearch indices: logs-2024-01-15, metrics-prod-001, trace-service-001",
+    "match_items": ["logs-2024-01-15", "metrics-prod-001", "trace-service-001"],
+    "exclude_items": ["2024-01-15", "prod", "001"],
+    "expected_pattern": "[a-z]+-[a-z0-9-]+"
+  },
+  {
+    "text": "Gradle tasks: compileDebug, assembleRelease, testDebug",
+    "match_items": ["compileDebug", "assembleRelease", "testDebug"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z]+[A-Z]\\w+"
+  },
+  {
+    "text": "Maven plugins: maven-compiler-plugin, maven-shade-plugin, maven-assembly-plugin",
+    "match_items": ["maven-compiler-plugin", "maven-shade-plugin", "maven-assembly-plugin"],
+    "exclude_items": ["maven", "compiler", "plugin"],
+    "expected_pattern": "maven-[a-z-]+-plugin"
+  },
+  {
+    "text": "npm scripts: npm run build, npm test, npm start",
+    "match_items": ["npm run build", "npm test", "npm start"],
+    "exclude_items": ["build", "npm", "run"],
+    "expected_pattern": "npm\\s(?:run\\s)?\\w+"
+  },
+  {
+    "text": "Git branches: feature/user-auth, bugfix/header-display, release/v2.1.0",
+    "match_items": ["feature/user-auth", "bugfix/header-display", "release/v2.1.0"],
+    "exclude_items": [],
+    "expected_pattern": "(?:feature|bugfix|release)/[a-z0-9.-]+"
+  },
+  {
+    "text": "Commit messages: [FEAT] Add user authentication, [FIX] Resolve memory leak, [DOCS] Update README",
+    "match_items": ["[FEAT] Add user", "[FIX] Resolve memory", "[DOCS] Update"],
+    "exclude_items": ["FEAT", "Add user", "[FEAT]"],
+    "expected_pattern": "\\[[A-Z]+\\]\\s\\w+"
+  },
+  {
+    "text": "Issue trackers: PROJ-123, JIRA-4567, TICKET-99",
+    "match_items": ["PROJ-123", "JIRA-4567", "TICKET-99"],
+    "exclude_items": [],
+    "expected_pattern": "[A-Z]+-\\d+"
+  },
+  {
+    "text": "Build artifacts: app-debug.apk, main-release.aar, lib-sources.jar",
+    "match_items": ["app-debug.apk", "main-release.aar", "lib-sources.jar"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z-]+\\.(?:apk|aar|jar)"
+  },
+  {
+    "text": "Test files: UserTest.java, product_test.py, auth_spec.js",
+    "match_items": ["UserTest.java", "product_test.py", "auth_spec.js"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z_A-Z]+(?:Test|_test|_spec)\\.\\w+"
+  },
+  {
+    "text": "Config formats: .env, .yaml, .toml, .json",
+    "match_items": [".env", ".yaml", ".toml"],
+    "exclude_items": ["env", "yaml", "."],
+    "expected_pattern": "\\.(?:env|yaml|toml|json)"
+  },
+  {
+    "text": "Swagger endpoints: /api/v1/users, /api/v1/products, /api/v1/orders",
+    "match_items": ["/api/v1/users", "/api/v1/products", "/api/v1/orders"],
+    "exclude_items": [],
+    "expected_pattern": "/api/v\\d+/\\w+"
+  },
+  {
+    "text": "GraphQL queries: { user(id: 123) { name } }, { product(sku: ABC) { price } }",
+    "match_items": ["{ user(id:", "{ product(sku:"],
+    "exclude_items": ["{", "id:", "user"],
+    "expected_pattern": "\\{\\s\\w+\\("
+  },
+  {
+    "text": "API response codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 404 Not Found, 500 Server Error",
+    "match_items": ["200 OK", "201 Created", "400 Bad Request"],
+    "exclude_items": [],
+    "expected_pattern": "[1-5]\\d{2}\\s\\w+"
+  },
+  {
+    "text": "Content types: application/json, text/html, image/png, video/mp4",
+    "match_items": ["application/json", "text/html", "image/png"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z]+/[a-z0-9+.-]+"
+  },
+  {
+    "text": "MIME types: .txt -> text/plain, .pdf -> application/pdf, .exe -> application/x-msdownload",
+    "match_items": ["text/plain", "application/pdf", "application/x-msdownload"],
+    "exclude_items": [".txt", ".pdf", "->"],
+    "expected_pattern": "[a-z]+/[a-z0-9+.-]+"
+  },
+  {
+    "text": "Charset encodings: charset=utf-8, charset=iso-8859-1, charset=utf-16",
+    "match_items": ["charset=utf-8", "charset=iso-8859-1"],
+    "exclude_items": [],
+    "expected_pattern": "charset=[a-z0-9-]+"
+  },
+  {
+    "text": "User agents: Mozilla/5.0 (Windows; U; Windows NT 5.1), Mozilla/5.0 (iPhone; CPU iPhone OS)",
+    "match_items": ["Mozilla/5.0 (Windows", "Mozilla/5.0 (iPhone"],
+    "exclude_items": ["Windows", "5.0", "Mozilla"],
+    "expected_pattern": "Mozilla/\\d\\.\\d\\s\\("
+  },
+  {
+    "text": "IP ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16",
+    "match_items": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"],
+    "exclude_items": [],
+    "expected_pattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/\\d{1,2}"
+  },
+  {
+    "text": "DNS records: A 192.168.1.1, MX mail.example.com, TXT v=spf1",
+    "match_items": ["A 192.168.1.1", "MX mail.example.com", "TXT v=spf1"],
+    "exclude_items": [],
+    "expected_pattern": "[A-Z]+\\s[a-z0-9.=-]+"
+  },
+  {
+    "text": "Regex patterns: /^[a-z]+$/, /^\\d{3}-\\d{4}$/, /^[A-Z]{2,}$/",
+    "match_items": ["/^[a-z]+$/", "/^\\d{3}-\\d{4}$/", "/^[A-Z]{2,}$/"],
+    "exclude_items": [],
+    "expected_pattern": "/\\^.+\\$/"
+  },
+  {
+    "text": "Code snippets: const x = 5, let name = 'John', var count = 0",
+    "match_items": ["const x = 5", "let name = 'John'", "var count = 0"],
+    "exclude_items": [],
+    "expected_pattern": "(?:const|let|var)\\s\\w+\\s="
+  },
+  {
+    "text": "Function signatures: function getName(id) {}, async function fetchData(url) {}, const sum = (a, b) => a + b",
+    "match_items": ["function getName(id)", "async function fetchData(url)"],
+    "exclude_items": [],
+    "expected_pattern": "(?:async\\s)?function\\s\\w+\\("
+  },
+  {
+    "text": "Class definitions: class User {}, public class Account {}, abstract class Service {}",
+    "match_items": ["class User", "public class Account", "abstract class Service"],
+    "exclude_items": [],
+    "expected_pattern": "(?:public|abstract)?\\s?class\\s\\w+"
+  },
+  {
+    "text": "Try-catch blocks: try {, } catch (Error e) {, } finally {",
+    "match_items": ["try {", "finally {"],
+    "exclude_items": ["Error", "}", "blocks"],
+    "expected_pattern": "(?:try|catch|finally)\\s?\\{?"
+  },
+  {
+    "text": "Decorators: @Component, @Injectable, @Required",
+    "match_items": ["@Component", "@Injectable", "@Required"],
+    "exclude_items": [],
+    "expected_pattern": "@\\w+"
+  },
+  {
+    "text": "Type annotations: number, string, boolean, Array<string>, Optional<User>",
+    "match_items": ["number", "string", "Array<string>"],
+    "exclude_items": ["<", ">", "Type"],
+    "expected_pattern": "(?:number|string|boolean|Array)(?:<\\w+>)?"
+  },
+  {
+    "text": "Generic templates: List<String>, Map<String, Integer>, Optional<T>",
+    "match_items": ["List<String>", "Map<String, Integer>", "Optional<T>"],
+    "exclude_items": [],
+    "expected_pattern": "[A-Z]\\w+<[^>]+>"
+  },
+  {
+    "text": "Package declarations: package com.example.app, package org.springframework.core, package java.util",
+    "match_items": ["com.example.app", "org.springframework.core", "java.util"],
+    "exclude_items": ["package", "com", "example"],
+    "expected_pattern": "[a-z]+(?:\\.[a-z]+)+"
+  },
+  {
+    "text": "Namespace declarations: namespace MyApp { }, namespace System.Collections {, using MyNamespace;",
+    "match_items": ["namespace MyApp", "namespace System.Collections"],
+    "exclude_items": [],
+    "expected_pattern": "namespace\\s[A-Za-z.]+"
+  },
+  {
+    "text": "Method calls: obj.getName(), arr.map(fn), str.split(',')",
+    "match_items": ["obj.getName()", "arr.map(fn)", "str.split(',')"],
+    "exclude_items": [],
+    "expected_pattern": "\\w+\\.\\w+\\([^)]*\\)"
+  },
+  {
+    "text": "Property access: user.name, config.database.host, response.data.items",
+    "match_items": ["user.name", "config.database.host", "response.data.items"],
+    "exclude_items": [],
+    "expected_pattern": "[a-z]+(?:\\.[a-z]+)+"
+  },
+  {
+    "text": "Array indexing: arr[0], matrix[2][3], dict['key']",
+    "match_items": ["arr[0]", "matrix[2][3]", "dict['key']"],
+    "exclude_items": [],
+    "expected_pattern": "\\w+\\[[^\\]]+\\]"
+  },
+  {
+    "text": "Lambda expressions: x => x * 2, (a, b) => a + b, list -> list.size()",
+    "match_items": ["x => x * 2", "(a, b) => a + b"],
+    "exclude_items": [],
+    "expected_pattern": "[\\w(),]+ =>\\s\\w+"
+  },
+  {
+    "text": "Ternary operators: x > 5 ? 'yes' : 'no', isActive ? show() : hide()",
+    "match_items": ["x > 5 ? 'yes' : 'no'", "isActive ? show() : hide()"],
+    "exclude_items": [],
+    "expected_pattern": "\\w+\\s\\?\\s[^:]+ :"
+  },
+  {
+    "text": "Spread operators: ...array, ...obj, [a, ...rest]",
+    "match_items": ["...array", "...obj"],
+    "exclude_items": ["array", "...", "["],
+    "expected_pattern": "\\.\\.\\.[a-z]+"
+  },
+  {
+    "text": "Template literals: `Hello ${name}`, `Price: $${price}`, `Line 1\\nLine 2`",
+    "match_items": ["`Hello ${name}`", "`Price: $${price}`"],
+    "exclude_items": [],
+    "expected_pattern": "`[^`]*\\$\\{[^}]+\\}[^`]*`"
+  },
+  {
+    "text": "Arrow functions: const fn = () => {}, const add = (a, b) => a + b",
+    "match_items": ["const fn = () => {}", "const add = (a, b) => a + b"],
+    "exclude_items": [],
+    "expected_pattern": "const\\s\\w+\\s=\\s\\([^)]*\\)\\s=>"
+  },
+  {
+    "text": "Destructuring: { name, age }, [ first, ...rest ], { user: { id } }",
+    "match_items": ["{ name, age }", "[ first, ...rest ]"],
+    "exclude_items": [],
+    "expected_pattern": "[\\[\\{]\\s?[a-z,. ]+[\\]\\}]"
+  },
+  {
+    "text": "Object literals: { id: 1, name: 'test' }, { active: true, count: 0 }",
+    "match_items": ["{ id: 1, name: 'test' }", "{ active: true, count: 0 }"],
+    "exclude_items": [],
+    "expected_pattern": "\\{\\s?\\w+:\\s[^}]+"
+  },
+  {
+    "text": "Async/await: async function getData() {, await response.json(), await Promise.all()",
+    "match_items": ["async function getData()", "await response.json()"],
+    "exclude_items": [],
+    "expected_pattern": "(?:async|await)\\s\\w+"
+  },
+  {
+    "text": "Promise chains: .then(res => {}), .catch(err => {}), .finally(() => {})",
+    "match_items": [".then(res => {})", ".catch(err => {})", ".finally(() => {})"],
+    "exclude_items": [],
+    "expected_pattern": "\\.(?:then|catch|finally)\\("
+  },
+  {
+    "text": "Module exports: export function, export const, export default",
+    "match_items": ["export function", "export const", "export default"],
+    "exclude_items": [],
+    "expected_pattern": "export\\s(?:function|const|default)"
+  },
+  {
+    "text": "File paths: ./src/main.js, ../utils/helpers.py, ../../config/app.yaml",
+    "match_items": ["./src/main.js", "../utils/helpers.py", "../../config/app.yaml"],
+    "exclude_items": [],
+    "expected_pattern": "\\.{1,2}/[a-z/.]+"
+  },
+  {
+    "text": "Environment paths: /usr/local/bin, /opt/app/config, C:\\Program Files\\App",
+    "match_items": ["/usr/local/bin", "/opt/app/config"],
+    "exclude_items": [],
+    "expected_pattern": "/(?:[a-z]+/)+"
+  },
+  {
+    "text": "Symlinks: /etc/alternatives/python, /var/log/application.log",
+    "match_items": ["/etc/alternatives/python", "/var/log/application.log"],
+    "exclude_items": [],
+    "expected_pattern": "/[a-z]+/[a-z-]+/\\w+(?:\\.\\w+)?"
+  },
+  {
+    "text": "Process IDs: pid=1234, pid=5678, pid=9999",
+    "match_items": ["pid=1234", "pid=5678", "pid=9999"],
+    "exclude_items": [],
+    "expected_pattern": "pid=\\d+"
+  },
+  {
+    "text": "Thread IDs: tid-001, tid-042, tid-999",
+    "match_items": ["tid-001", "tid-042", "tid-999"],
+    "exclude_items": [],
+    "expected_pattern": "tid-\\d{3}"
+  },
+  {
+    "text": "Request IDs: req_abc123def456, req_xyz789uvw012, req_pqr345stu678",
+    "match_items": ["req_abc123def456", "req_xyz789uvw012", "req_pqr345stu678"],
+    "exclude_items": [],
+    "expected_pattern": "req_[a-z0-9]{12}"
+  },
+  {
+    "text": "Correlation IDs: corr_2024_001, corr_2024_042, corr_2024_999",
+    "match_items": ["corr_2024_001", "corr_2024_042", "corr_2024_999"],
+    "exclude_items": [],
+    "expected_pattern": "corr_\\d{4}_\\d{3}"
+  },
+  {
+    "text": "Trace IDs: trace_span_001, trace_span_042, trace_span_999",
+    "match_items": ["trace_span_001", "trace_span_042", "trace_span_999"],
+    "exclude_items": [],
+    "expected_pattern": "trace_\\w+_\\d{3}"
+  }
+]
