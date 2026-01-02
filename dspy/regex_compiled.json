@@ -17,8 +17,8 @@
           "ERR-999"
         ],
         "pattern_hints": "Observations: All items contain digits; All items follow 'word-digits with hyphen' structure; Common prefix: 'ERR-'; Contains separators: {'-'}; All items have length 6; Match items have different lengths than excludes; 'ERR-99' is substring of excluded 'ERR-999' - use \\b word boundaries to prevent partial matches; All matches are shorter than excludes - length-limited quantifiers like {3} may help | Suggested fragments: \\w+-\\d+, \\d+, \\b | Avoid: Lookahead (?!) - use word boundaries \\b instead; Patterns without word boundaries that match substrings",
-        "reasoning": "The patterns 'ERR-\\d{2}' will exclude 'ERR-001' and 'ERR-002', but they will also match 'ERR-999'. To prevent this, we need to add word boundaries around the pattern to ensure that it only matches whole words.",
-        "pattern": "\\bERR-\\d{2}\\b"
+        "reasoning": "Not supplied for this particular example.",
+        "pattern": "ERR-\\d{2}"
       },
       {
         "augmented": true,
@@ -68,8 +68,8 @@
           "_42"
         ],
         "pattern_hints": "Observations: All items contain digits; All items follow 'word_digits with underscore' structure; Contains separators: {'_'}; Match items have different lengths than excludes | Suggested fragments: \\w+_\\d+, \\d+",
-        "reasoning": "All items contain digits; All items follow 'word_digits with underscore' structure; Contains separators: {'_'}; Match items have different lengths than excludes | Suggested fragments: \\w+_\\d+, \\d+",
-        "pattern": "\\w+\\_\\d+"
+        "reasoning": "The match items are in the format 'word_digits_with_underscore'. The pattern needs to capture these formats, excluding items that start with 'user_', have an underscore followed by digits, or end with '_42'.",
+        "pattern": "^\\w+_\\d+|\\d+$"
       },
       {
         "text": "Call 555-1234 or 555-9876 today",
@@ -86,11 +86,11 @@
       }
     ],
     "signature": {
-      "instructions": "Generate a regex pattern matching all match_items but none of exclude_items.\nUse character classes (\\d, \\w, [A-Z]) not literals. No anchors (^$). Use \\b for word boundaries.\n\nPlease adhere to the following rules when making your prediction:\n1. **Character Type**: Items should be alphanumeric to match all given examples.\n2. **Prefix for Matches**:\n   - **Example 1:** Items may start with 'ERR-' (lowercase).\n   - **Example 2:** Single uppercase letters followed by digits.\n3. **Pattern for Match Items**:\n   - May contain digits in a specific format.\n4. **Length Restrictions**: Match items should have different lengths from exclude items.",
+      "instructions": "Given the fields `text`, `match_items`, `exclude_items`, `pattern_hints`, produce the fields `pattern`.\n\nPlease adhere to the following rules when making your prediction:\n1. **Character Type**: Items should be alphanumeric to match all given examples.\n2. **Prefix for Matches**:\n   - **Example 1:** Items may start with 'ERR-' (lowercase).\n   - **Example 2:** Single uppercase letters followed by digits.\n3. **Pattern for Match Items**:\n   - May contain digits in a specific format.\n4. **Length Restrictions**: Match items should have different lengths from exclude items.",
       "fields": [
         {
           "prefix": "Text:",
-          "description": "The full text to search within using re.findall()"
+          "description": "The full text to search within"
         },
         {
           "prefix": "Match Items:",
@@ -102,7 +102,7 @@
         },
         {
           "prefix": "Pattern Hints:",
-          "description": "Analysis hints about the match items (character types, common patterns, etc.)"
+          "description": "Analysis hints about the match items"
         },
         {
           "prefix": "Reasoning: Let's think step by step in order to",
@@ -110,7 +110,7 @@
         },
         {
           "prefix": "Pattern:",
-          "description": "Regex pattern using character classes [A-Z] \\d \\w NOT literal match strings"
+          "description": "Regex pattern"
         }
       ]
     },

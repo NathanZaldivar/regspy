@@ -10,9 +10,9 @@ Regex Generator is a desktop GUI tool for generating regex patterns from highlig
 
 The application uses a WebView2-based GUI architecture with three layers:
 
-1. **AutoHotkey Host** (`regespy.ahk`): Window management, clipboard monitoring, Python process orchestration
-2. **Web Frontend** (`regespy.html/js/css`): Text selection UI, highlight visualization, results display
-3. **Python Backend** (`regespy.py`): DSPy-based regex generation using Ollama LLM with multi-criteria scoring
+1. **AutoHotkey Host** (`regspy.ahk`): Window management, clipboard monitoring, Python process orchestration
+2. **Web Frontend** (`regspy.html/js/css`): Text selection UI, highlight visualization, results display
+3. **Python Backend** (`regspy.py`): DSPy-based regex generation using Ollama LLM with multi-criteria scoring
 
 ### Data Flow
 ```
@@ -39,9 +39,9 @@ Key AHK functions called from JS: `generateRegex()`, `cancel()`, `loadDataset()`
 
 ```
 regen/
-├── regespy.ahk          # AutoHotkey host
-├── regespy.py           # Python backend
-├── regespy.html/js/css  # Web frontend
+├── regspy.ahk          # AutoHotkey host
+├── regspy.py           # Python backend
+├── regspy.html/js/css  # Web frontend
 └── dspy/                 # DSPy training data
     ├── regex-dspy-train.json   # Training examples (227+)
     ├── regex_compiled.json     # Pre-compiled program
@@ -52,27 +52,27 @@ regen/
 
 ```bash
 # Run the GUI application
-autohotkey regespy.ahk
+autohotkey regspy.ahk
 
 # Run Python test suite (detailed output with scores)
-python regespy.py --test
+python regspy.py --test
 
 # Pre-compile for faster runtime (saves to dspy/regex_compiled.json)
-python regespy.py --compile
+python regspy.py --compile
 
 # Validate training set
 python dspy/validate_trainset.py
 
 # CLI usage (called by AHK)
-python regespy.py <input.json> <output.json>
+python regspy.py <input.json> <output.json>
 
 # CLI with custom config override
-python regespy.py <input.json> <output.json> --config <config.json>
+python regspy.py <input.json> <output.json> --config <config.json>
 
 # Dataset management
-python regespy.py --list-dataset <output.json>    # Export dataset
-python regespy.py --add-example <example.json>    # Add example
-python regespy.py --delete-example <index>        # Delete by index
+python regspy.py --list-dataset <output.json>    # Export dataset
+python regspy.py --add-example <example.json>    # Add example
+python regspy.py --delete-example <index>        # Delete by index
 ```
 
 ## Python Regex Generation
@@ -115,7 +115,7 @@ The textbox is `contenteditable` and users can select the same text multiple tim
 2. **DOM structure changes**: After highlighting, the DOM has `<span>` elements mixed with text nodes
 3. **Newline normalization**: Windows `\r\n` is normalized to `\n` to ensure consistent positions
 
-**Algorithm** (`regespy.js` mouseup handler):
+**Algorithm** (`regspy.js` mouseup handler):
 1. Create a Range from textbox start to selection start
 2. Get `approxStart = beforeRange.toString().length` (text length before selection)
 3. Find ALL occurrences of selected text in `originalText` using indexOf

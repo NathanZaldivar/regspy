@@ -5,7 +5,7 @@
 ; REGEX GENERATOR - AutoHotkey WebView2 Application
 ;
 ; A GUI tool for generating regex patterns from highlighted text.
-; Uses a local Ollama LLM via regespy.py for pattern generation.
+; Uses a local Ollama LLM via regspy.py for pattern generation.
 ;
 ; Features:
 ;   - Live clipboard monitoring and display
@@ -18,7 +18,7 @@
 ;   - WebViewToo.ahk library
 ;   - JSON.ahk library
 ;   - Python 3.x with ollama, pydantic packages
-;   - regespy.py in same directory
+;   - regspy.py in same directory
 ; ===========================================
 
 ; ===========================================
@@ -109,7 +109,7 @@ Main() {
     MyWindow.wv.add_NavigationCompleted(OnNavComplete)
 
     ; Navigate to the HTML interface
-    MyWindow.Navigate(scriptDir "\regespy.html")
+    MyWindow.Navigate(scriptDir "\regspy.html")
     
     ; Show window (w600 h500 = 600px wide, 500px tall)
     MyWindow.Show("w600 h500")
@@ -183,7 +183,7 @@ Base64Encode(str) {
  * Flow:
  *   1. Create input JSON with text, highlighted items, and excluded items
  *   2. Write to temp file
- *   3. Run regespy.py asynchronously with input/output file paths
+ *   3. Run regspy.py asynchronously with input/output file paths
  *   4. Poll for output file completion
  *   5. Read output JSON and send to JS
  *
@@ -199,7 +199,7 @@ GenerateRegex(WebView, fullText, selectionsJson, excludedJson := "[]", configJso
     ; Cancel any pending process first
     CancelPendingProcess()
 
-    ; Get script directory for regespy.py path
+    ; Get script directory for regspy.py path
     SplitPath(A_LineFile,, &scriptDir)
 
     ; Parse selections JSON array
@@ -235,8 +235,8 @@ GenerateRegex(WebView, fullText, selectionsJson, excludedJson := "[]", configJso
 
     ; Generate unique filenames using timestamp
     timestamp := A_TickCount
-    inputFile := TEMP_DIR "\regespy_input_" timestamp ".json"
-    outputFile := TEMP_DIR "\regespy_output_" timestamp ".json"
+    inputFile := TEMP_DIR "\regspy_input_" timestamp ".json"
+    outputFile := TEMP_DIR "\regspy_output_" timestamp ".json"
     configFile := ""
 
     ; Write input JSON to temp file
@@ -250,7 +250,7 @@ GenerateRegex(WebView, fullText, selectionsJson, excludedJson := "[]", configJso
 
     ; Write config file if provided
     if (configJson != "") {
-        configFile := TEMP_DIR "\regespy_config_" timestamp ".json"
+        configFile := TEMP_DIR "\regspy_config_" timestamp ".json"
         try {
             FileAppend(configJson, configFile, "UTF-8-RAW")
         } catch as e {
@@ -264,7 +264,7 @@ GenerateRegex(WebView, fullText, selectionsJson, excludedJson := "[]", configJso
     ; ===========================================
 
     ; Build command line
-    pythonScript := scriptDir "\regespy.py"
+    pythonScript := scriptDir "\regspy.py"
     cmdLine := PYTHON_PATH ' "' pythonScript '" "' inputFile '" "' outputFile '"'
 
     ; Add config flag if we have a config file
@@ -385,7 +385,7 @@ CheckProcessComplete() {
     }
 
     ; Send full result object to JS (includes results array with detailed scoring)
-    ; onregespyerated() is defined in regespy.js
+    ; onRegexGenerated() is defined in regspy.js
     resultsJson := JSON.Dump(result)
 
     ; Escape for JS string (order matters: backslashes first, then quotes, then newlines)
@@ -394,7 +394,7 @@ CheckProcessComplete() {
     resultsJson := StrReplace(resultsJson, "`n", "\n")
     resultsJson := StrReplace(resultsJson, "`r", "\r")
 
-    MyWindow.ExecuteScriptAsync("onregespyerated('" resultsJson "')")
+    MyWindow.ExecuteScriptAsync("onRegexGenerated('" resultsJson "')")
     MyWindow.ExecuteScriptAsync('setLoading(false)')
 }
 
@@ -476,15 +476,15 @@ CleanupTempFiles(inputFile, outputFile, configFile := "") {
 LoadDataset(WebView) {
     global MyWindow, PYTHON_PATH, TEMP_DIR
 
-    ; Get script directory for regespy.py path
+    ; Get script directory for regspy.py path
     SplitPath(A_LineFile,, &scriptDir)
 
     ; Generate unique output filename
     timestamp := A_TickCount
-    outputFile := TEMP_DIR "\regespy_dataset_" timestamp ".json"
+    outputFile := TEMP_DIR "\regspy_dataset_" timestamp ".json"
 
     ; Build command line
-    pythonScript := scriptDir "\regespy.py"
+    pythonScript := scriptDir "\regspy.py"
     cmdLine := PYTHON_PATH ' "' pythonScript '" --list-dataset "' outputFile '"'
 
     ; Run Python script
@@ -534,12 +534,12 @@ LoadDataset(WebView) {
 AddToDataset(WebView, exampleJson, resultIndex) {
     global MyWindow, PYTHON_PATH, TEMP_DIR
 
-    ; Get script directory for regespy.py path
+    ; Get script directory for regspy.py path
     SplitPath(A_LineFile,, &scriptDir)
 
     ; Generate unique input filename
     timestamp := A_TickCount
-    inputFile := TEMP_DIR "\regespy_example_" timestamp ".json"
+    inputFile := TEMP_DIR "\regspy_example_" timestamp ".json"
 
     ; Write example to temp file
     try {
@@ -550,7 +550,7 @@ AddToDataset(WebView, exampleJson, resultIndex) {
     }
 
     ; Build command line
-    pythonScript := scriptDir "\regespy.py"
+    pythonScript := scriptDir "\regspy.py"
     cmdLine := PYTHON_PATH ' "' pythonScript '" --add-example "' inputFile '"'
 
     ; Run Python script
@@ -579,11 +579,11 @@ AddToDataset(WebView, exampleJson, resultIndex) {
 DeleteFromDataset(WebView, index) {
     global MyWindow, PYTHON_PATH
 
-    ; Get script directory for regespy.py path
+    ; Get script directory for regspy.py path
     SplitPath(A_LineFile,, &scriptDir)
 
     ; Build command line
-    pythonScript := scriptDir "\regespy.py"
+    pythonScript := scriptDir "\regspy.py"
     cmdLine := PYTHON_PATH ' "' pythonScript '" --delete-example ' index
 
     ; Run Python script

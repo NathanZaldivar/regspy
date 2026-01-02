@@ -13,13 +13,13 @@ Prerequisites:
     ollama serve
 
 Usage:
-    python regespy.py --test                              # Run test cases
-    python regespy.py --compile                           # Pre-compile for faster runtime
-    python regespy.py <input.json> <output.json>          # Generate regex
-    python regespy.py <input.json> <output.json> --config <config.json>  # With custom config
-    python regespy.py --list-dataset <output.json>        # Export training dataset
-    python regespy.py --add-example <example.json>        # Add example to dataset
-    python regespy.py --delete-example <index>            # Delete example from dataset
+    python regspy.py --test                              # Run test cases
+    python regspy.py --compile                           # Pre-compile for faster runtime
+    python regspy.py <input.json> <output.json>          # Generate regex
+    python regspy.py <input.json> <output.json> --config <config.json>  # With custom config
+    python regspy.py --list-dataset <output.json>        # Export training dataset
+    python regspy.py --add-example <example.json>        # Add example to dataset
+    python regspy.py --delete-example <index>            # Delete example from dataset
 """
 
 import dspy
@@ -57,12 +57,12 @@ class Config:
     dataset_file: str = field(default_factory=lambda: resolve_path("dspy/regex-dspy-train.json"))
 
     # Refine parameters
-    max_attempts: int = 10           # N for dspy.Refine
+    max_attempts: int = 10          # N for dspy.Refine
     reward_threshold: float = 0.85  # Stop if we hit this score
     fail_count: int = None          # None = keep trying until N
 
     # LM settings
-    temperature: float = 0.7        # Balanced temp for Refine (lower = more deterministic)
+    temperature: float = 1          # Balanced temp for Refine (lower = more deterministic)
     enable_cache: bool = False
 
     # Few-shot settings
@@ -283,12 +283,9 @@ def format_hints_for_prompt(hints: dict) -> str:
 # ============================================================================
 
 class GenerateRegex(dspy.Signature):
-    """Generate a regex pattern matching all match_items but none of exclude_items.
-    Use character classes (\\d, \\w, [A-Z]) not literals. No anchors (^$). Use \\b for word boundaries.
-    """
 
     text: str = dspy.InputField(
-        desc="The full text to search within using re.findall()"
+        desc="The full text to search within"
     )
     match_items: list[str] = dspy.InputField(
         desc="Strings the pattern MUST match"
@@ -297,11 +294,11 @@ class GenerateRegex(dspy.Signature):
         desc="Strings the pattern must NOT match"
     )
     pattern_hints: str = dspy.InputField(
-        desc="Analysis hints about the match items (character types, common patterns, etc.)"
+        desc="Analysis hints about the match items"
     )
 
     pattern: str = dspy.OutputField(
-        desc="Regex pattern using character classes [A-Z] \\d \\w NOT literal match strings"
+        desc="Regex pattern"
     )
 
 
@@ -941,57 +938,45 @@ def generate_regex(input_data: dict, config: Config = None) -> dict:
         print(f"  Max attempts: {config.max_attempts}")
         print(f"  Stop threshold: {config.reward_threshold}")
 
-    # Run multiple LLM generations to collect diverse patterns
-    # Instead of relying on Refine's single output, we run the module multiple times
-    # Duplicates don't count as attempts - LLM gets "free passes" to try again
-    # Safety cap prevents infinite loops if LLM is completely stuck
-    seen_llm_patterns = set()
-    unique_attempts = 0
-    total_calls = 0
-    max_total_calls = config.max_attempts * 3  # Safety cap: 3x max attempts
+    # Reward function for dspy.Refine - provides feedback to guide iteration
+    def reward_fn(args, pred):
+        return compute_reward(args, pred, config)
 
-    while unique_attempts < config.max_attempts and total_calls < max_total_calls:
-        total_calls += 1
-        try:
-            result = compiled_module(
-                text=text,
-                match_items=match_items,
-                exclude_items=exclude_items,
-                pattern_hints=hints_str
-            )
+    # Wrap compiled module with dspy.Refine for iterative improvement
+    # Refine provides feedback to the LLM about what went wrong, enabling
+    # true iterative refinement rather than just repeated sampling
+    # Note: Duplicates are less likely with Refine since feedback changes context
+    refine_module = dspy.Refine(
+        module=compiled_module,
+        N=config.max_attempts,
+        reward_fn=reward_fn,
+        threshold=config.reward_threshold,
+        fail_count=config.fail_count
+    )
 
-            pattern = safe_unescape(result.pattern)
+    try:
+        if config.debug:
+            print(f"\n[REFINE] Running iterative refinement...")
 
-            # Duplicate? Don't count as an attempt, just try again
-            if pattern in seen_llm_patterns:
-                if config.debug:
-                    print(f"  (duplicate: {pattern}, retrying...)")
-                continue
+        result = refine_module(
+            text=text,
+            match_items=match_items,
+            exclude_items=exclude_items,
+            pattern_hints=hints_str
+        )
 
-            # New unique pattern - count this attempt
-            unique_attempts += 1
-            seen_llm_patterns.add(pattern)
-            llm_result = score_pattern(pattern, text, match_items, exclude_items, config, source="llm")
-            pattern_results.append(llm_result)
+        pattern = safe_unescape(result.pattern)
+        llm_result = score_pattern(pattern, text, match_items, exclude_items, config, source="llm")
+        pattern_results.append(llm_result)
 
-            if config.debug:
-                print(f"\n[LLM Attempt {unique_attempts}]")
-                print(f"  Pattern: {pattern}")
-                print(f"  Score: {llm_result.total_score:.3f}")
+        if config.debug:
+            print(f"\n[REFINE RESULT]")
+            print(f"  Pattern: {pattern}")
+            print(f"  Score: {llm_result.total_score:.3f}")
 
-            # Early exit if we found a perfect pattern
-            if llm_result.total_score >= config.reward_threshold:
-                if config.debug:
-                    print(f"  Hit threshold {config.reward_threshold}, stopping early")
-                break
-
-        except Exception as e:
-            if config.debug:
-                print(f"\n[LLM Attempt {unique_attempts + 1} ERROR] {e}")
-            continue
-
-    if config.debug and total_calls >= max_total_calls:
-        print(f"\n  (hit safety cap of {max_total_calls} total calls, LLM may be stuck)")
+    except Exception as e:
+        if config.debug:
+            print(f"\n[REFINE ERROR] {e}")
 
     # Sort by score (best first), deduplicate by (pattern, source)
     # This keeps both LLM and grex even if they produce the same pattern
@@ -1413,13 +1398,13 @@ def main():
 
     # Show usage
     print("Usage:")
-    print("  python regespy.py --test                              # Run test cases")
-    print("  python regespy.py --compile                           # Pre-compile for faster runtime")
-    print("  python regespy.py <input.json> <output.json>          # Generate regex")
-    print("  python regespy.py <input.json> <output.json> --config <config.json>  # With custom config")
-    print("  python regespy.py --list-dataset <output.json>        # Export training dataset")
-    print("  python regespy.py --add-example <example.json>        # Add example to dataset")
-    print("  python regespy.py --delete-example <index>            # Delete example from dataset")
+    print("  python regspy.py --test                              # Run test cases")
+    print("  python regspy.py --compile                           # Pre-compile for faster runtime")
+    print("  python regspy.py <input.json> <output.json>          # Generate regex")
+    print("  python regspy.py <input.json> <output.json> --config <config.json>  # With custom config")
+    print("  python regspy.py --list-dataset <output.json>        # Export training dataset")
+    print("  python regspy.py --add-example <example.json>        # Add example to dataset")
+    print("  python regspy.py --delete-example <index>            # Delete example from dataset")
     sys.exit(1)
 
 

@@ -1,56 +1,54 @@
-# Regex Generator
 
-A desktop GUI tool for generating regex patterns from highlighted text using LLM assistance. Select text examples you want to match, optionally mark exclusions, and let the AI generate optimized regex patterns.
+# regspy
 
-![AutoHotkey v2.0](https://img.shields.io/badge/AutoHotkey-v2.0-brightgreen)
-![Python 3.x](https://img.shields.io/badge/Python-3.x-3776AB)
-![Ollama](https://img.shields.io/badge/LLM-Ollama-orange)
+regspy is a regex pattern generator, you enter some data -> select what you want matched and or not matched -> ??? -> Pattern!
+
+![alt text](imgs/demo.gif)
+
+This project started as me trying to learn dspy, its vibe coded to shit and back but it works and has some accomplishments:
+ - Runs on small models with 3B parameter at a minimum, so it should run on anything.
+ - It outperforms grex ~~in metrics that were defined by me~~.
+ - Learns from what you feed it, it generated a pattern you liked? add it to the training set!
+ - No human written prompts or rules or "make sure to NOT explode" bs.
+ - Context aware generation, it learns from failed patterns and most importantly WHY it failed.
+ - Generates patterns based on a scoring system that ranks patterns by:
+	 - **matches_all**: Percentage of required items the pattern matches
+	 - **excludes_all**: Percentage of excluded items the pattern avoids
+		 - *If no excluded items are selected, this metrics weights are divided equally amongst the others.*
+	 - **coherence**: How similar extra matches are to target items
+	 - **generalization**: Use of character classes (\\d, \\w) vs literals
+	 - **simplicity**: How short patterns are and without the use of branching
+
+Is it perfect? hell no, the training set, scoring system, hint generation could be improved upon, so if you want have a go at it i included a CLAUDE.md for you.
+
+But if you're a everyday smooth brain like me that needs a simple pattern on the fly because for some reason your brain is physically impossible of remembering that lookaheads exist, regspy should be of some help. 
 
 ## Features
 
 - **Visual Text Selection**: Highlight text to create match examples (cyan) or exclusions (red)
 - **LLM-Powered Generation**: Uses local Ollama with qwen2.5-coder:3b for intelligent pattern creation
-- **Multi-Criteria Scoring**: 5-weight system balances accuracy, exclusions, coherence, generalization, and simplicity
 - **Training Dataset**: 227+ curated examples with ability to add your own
 - **Pre-compilation**: Optional rule extraction for faster runtime inference
 - **Session Config**: Adjust model, temperature, and scoring weights on the fly
 
-## Prerequisites
+## Installation
 
 - **AutoHotkey v2.0** - [Download](https://www.autohotkey.com/)
-- **Python 3.x** with packages:
+- **Python Libs**:
   ```bash
   pip install dspy grex ollama
   ```
-- **Ollama** running locally with model installed:
+- **Ollama**:
   ```bash
   ollama serve
   ollama pull qwen2.5-coder:3b
   ```
+- **Run**:
+  ```bash
+  AutoHotkey64.exe regspy.ahk # Or just double click regspy.ahk
+  ```
 
-## Installation
-
-1. Clone or download this repository
-2. Install Python dependencies: `pip install dspy grex ollama`
-3. Ensure Ollama is running: `ollama serve`
-4. Pull the model: `ollama pull qwen2.5-coder:3b`
-
-## Usage
-
-### GUI Application
-
-```bash
-autohotkey regexgen.ahk
-```
-
-**Workflow:**
-1. Paste or type text into the textbox
-2. Highlight text you want to match (cyan highlight)
-3. Right-click selections to mark as exclusions (red highlight)
-4. Click "Generate" to create regex patterns
-5. View results in the Results tab, copy patterns, or add to training dataset
-
-### Command Line
+### CLI flags
 
 ```bash
 # Run test suite
@@ -71,29 +69,6 @@ python regexgen.py --add-example example.json
 python regexgen.py --delete-example <index>
 ```
 
-## Project Structure
-
-```
-regen/
-├── regexgen.ahk         # AutoHotkey host application
-├── regexgen.py          # Python backend (DSPy + Ollama)
-├── regexgen.html        # Web frontend
-├── regexgen.js          # Frontend logic
-├── regexgen.css         # Styles
-├── lib/                 # AutoHotkey dependencies
-│   ├── WebViewToo.ahk   # WebView2 wrapper
-│   ├── WebView2.ahk     # WebView2 bindings
-│   ├── JSON.ahk         # JSON parsing
-│   ├── Promise.ahk      # Async support
-│   ├── ComVar.ahk       # COM utilities
-│   ├── 32bit/           # WebView2Loader.dll (32-bit)
-│   └── 64bit/           # WebView2Loader.dll (64-bit)
-└── dspy/                # Training data
-    ├── regex-dspy-train.json   # Training examples
-    ├── regex_compiled.json     # Pre-compiled program
-    └── validate_trainset.py    # Validation script
-```
-
 ## Architecture
 
 ```
@@ -106,28 +81,12 @@ regen/
      IPC Bridge          Results Display         Scoring
 ```
 
-## Scoring System
-
-Generated patterns are evaluated on 5 weighted criteria:
-
-| Weight | Metric | Description |
-|--------|--------|-------------|
-| 35% | matches_all | Pattern matches all positive examples |
-| 25% | excludes_all | Pattern avoids all negative examples |
-| 15% | coherence | Extra matches are similar to examples |
-| 15% | generalization | Uses character classes (`\d`, `\w`, etc.) |
-| 10% | simplicity | Shorter patterns with less branching |
-
 ## Configuration
 
 The Config tab allows session-level adjustments:
 
 - **Model**: Ollama model name (default: `qwen2.5-coder:3b`)
-- **Temperature**: LLM creativity (default: 0.7)
+- **Temperature**: LLM creativity (default: 1)
 - **Max Attempts**: Refinement iterations (default: 10)
 - **Reward Threshold**: Stop early if score exceeds (default: 0.85)
 - **Scoring Weights**: Adjust the 5 criteria weights
-
-## License
-
-MIT License
