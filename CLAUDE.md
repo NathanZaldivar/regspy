@@ -31,7 +31,7 @@ Key AHK functions called from JS: `generateRegex()`, `cancel()`, `loadDataset()`
 
 ## Dependencies
 
-- **AutoHotkey v2.0** with WebViewToo.ahk, JSON.ahk, qol_helper.ahk libraries (in `../../../Lib/`)
+- **AutoHotkey v2.0** with WebViewToo.ahk, JSON.ahk, qol_helper.ahk libraries (in `./lib`)
 - **Python 3.x** with: `dspy`, `grex`, `ollama`
 - **Ollama** running locally (`http://localhost:11434`) with model `qwen2.5:3b`
 
