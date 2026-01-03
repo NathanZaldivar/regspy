@@ -51,32 +51,39 @@ def resolve_path(relative_path: str) -> str:
 
 @dataclass
 class Config:
-    """Central configuration for the regex generator"""
-    model: str = "qwen2.5-coder:3b"
+    """Central configuration for the regex generator.
+
+    Designed to run on modest hardware - 3B models work on most laptops.
+    Users with better hardware can override via --config for larger models.
+    """
+    model: str = "qwen2.5-coder:3b"  # Small model, runs on potato
     ollama_url: str = "http://localhost:11434"
     dataset_file: str = field(default_factory=lambda: resolve_path("dspy/regex-dspy-train.json"))
 
     # Refine parameters
     max_attempts: int = 10          # N for dspy.Refine
     reward_threshold: float = 0.85  # Stop if we hit this score
-    fail_count: int = None          # None = keep trying until N
+    fail_count: int = None          # Stop after count, if None continue till we reach N
 
     # LM settings
-    temperature: float = 1          # Balanced temp for Refine (lower = more deterministic)
-    enable_cache: bool = False
+    temperature: float = 0.4        # Good balance, fuck setting this to 1 I've heard better rambling from politicians
+    enable_cache: bool = False      # Fresh patterns each runtime call
+    num_ctx: int = 8192             # Context window size, mainly for compile prompts that can go path 4k default contex window
 
-    # Few-shot settings
-    few_shot_k: int = 10
+    # Few-shot settings (uses all examples from dataset)
     use_cot: bool = True            # CoT helps with reasoning about patterns
 
     # Validation settings
     debug: bool = True
 
     # Pre-compiled program settings (InferRules optimizer)
+    # Worth noting if you're going to up threads, you might want to set your OLLAMA_NUM_PARALLEL
+    # Good rule of thumb is to keep number_of_compile_threads and OLLAMA_NUM_PARALLEL values 1:1
+    # Admin power shell -> run this cmd -> setx OLLAMA_NUM_PARALLEL 8 /M
     compiled_program_path: str = field(default_factory=lambda: resolve_path("dspy/regex_compiled.json"))
-    compile_threads: int = 4
+    compile_threads: int = 8        # Conservative, got good cpu? Up that thang
     compile_candidates: int = 16    # Number of candidate programs to evaluate
-    compile_num_rules: int = 10     # Number of rules to extract from examples
+    compile_num_rules: int = 5      # Number of rules to extract from examples
 
 
     # Reward weights - 5-weight system
@@ -712,16 +719,21 @@ def generate_grex_pattern(match_items: list[str]) -> str | None:
 # ============================================================================
 
 def load_trainset(config: Config) -> list[dspy.Example]:
-    """Load training examples from file."""
+    """Load training examples from file.
+
+    Uses all examples from the dataset (no limit) since the model has sufficient
+    context window (32K). New examples added via --add-example are always included.
+    """
 
     trainset = []
 
-    # Load from file
+    # Load ALL examples - no few_shot_k limit
+    # Model has 32K context, dataset is ~3K tokens, plenty of room
     try:
         with open(config.dataset_file, 'r') as f:
             data = json.load(f)
 
-        for item in data[:config.few_shot_k]:
+        for item in data:
             hints = analyze_match_items(item["match_items"], item.get("exclude_items", []))
             example = dspy.Example(
                 text=item["text"],
@@ -767,7 +779,8 @@ def compile_and_save(config: Config = None) -> str:
         api_base=config.ollama_url,
         api_key='',
         cache=True,  # Enable cache during compilation
-        temperature=config.temperature
+        temperature=config.temperature,
+        num_ctx=config.num_ctx
     )
     dspy.configure(lm=lm)
 
@@ -824,7 +837,7 @@ def compile_and_save(config: Config = None) -> str:
 
     compiled_program = optimizer.compile(
         student=base_module,
-        trainset=trainset[:config.few_shot_k]  # Use subset for speed
+        trainset=trainset  # Use all examples
     )
 
     # Save compiled program
@@ -907,7 +920,8 @@ def generate_regex(input_data: dict, config: Config = None) -> dict:
         api_base=config.ollama_url,
         api_key='',
         cache=config.enable_cache,
-        temperature=config.temperature
+        temperature=config.temperature,
+        num_ctx=config.num_ctx
     )
     dspy.configure(lm=lm)
 
@@ -924,9 +938,9 @@ def generate_regex(input_data: dict, config: Config = None) -> dict:
         else:
             base_module = dspy.Predict(GenerateRegex)
 
-        # Compile with few-shot if available
+        # Compile with few-shot if available (use all examples)
         if trainset:
-            optimizer = LabeledFewShot(k=min(len(trainset), config.few_shot_k))
+            optimizer = LabeledFewShot(k=len(trainset))
             compiled_module = optimizer.compile(student=base_module, trainset=trainset)
         else:
             compiled_module = base_module

@@ -86,7 +86,8 @@ python regexgen.py --delete-example <index>
 The Config tab allows session-level adjustments:
 
 - **Model**: Ollama model name (default: `qwen2.5-coder:3b`)
-- **Temperature**: LLM creativity (default: 1)
+- **Temperature**: LLM creativity (default: 0.4)
 - **Max Attempts**: Refinement iterations (default: 10)
 - **Reward Threshold**: Stop early if score exceeds (default: 0.85)
 - **Scoring Weights**: Adjust the 5 criteria weights
+- **Context Window** (`num_ctx`): Ollama context size (default: 8192). Ollama defaults to 4096 which can truncate prompts with many training examples. If you see "truncating input prompt" warnings in Ollama logs, bump this up. Uses ~200MB extra VRAM per 4K increase on 3B models.
